@@ -3,6 +3,7 @@ import { config } from 'dotenv';
 import { MongoClient, Db } from 'mongodb';
 import pg from 'pg';
 import { faker } from '@faker-js/faker';
+import os from 'os';
 
 // Load environment variables
 config();
@@ -78,12 +79,43 @@ class DatabaseBenchmark {
     };
   }
 
+  private getResourceUsage() {
+    const cpuUsage = process.cpuUsage();
+    const memUsage = process.memoryUsage();
+    const freeMem = os.freemem();
+    const totalMem = os.totalmem();
+    const memoryUsagePercent = ((totalMem - freeMem) / totalMem) * 100;
+
+    return {
+      cpu: {
+        user: cpuUsage.user / 1000000, // Convert to seconds
+        system: cpuUsage.system / 1000000
+      },
+      memory: {
+        heapUsed: Math.round(memUsage.heapUsed / 1024 / 1024), // MB
+        heapTotal: Math.round(memUsage.heapTotal / 1024 / 1024),
+        rss: Math.round(memUsage.rss / 1024 / 1024),
+        memoryUsagePercent: Math.round(memoryUsagePercent * 100) / 100
+      }
+    };
+  }
+
+  private logResourceUsage(operation: string, dbType: 'MongoDB' | 'PostgreSQL', startUsage: any) {
+    const endUsage = this.getResourceUsage();
+    console.log(`\n${dbType} ${operation} Resource Usage:`);
+    console.log(`CPU User Time: ${(endUsage.cpu.user - startUsage.cpu.user).toFixed(2)}s`);
+    console.log(`CPU System Time: ${(endUsage.cpu.system - startUsage.cpu.system).toFixed(2)}s`);
+    console.log(`Memory Usage: ${endUsage.memory.heapUsed}MB (Heap) / ${endUsage.memory.rss}MB (Total)`);
+    console.log(`System Memory Usage: ${endUsage.memory.memoryUsagePercent}%`);
+  }
+
   async insertTest(count: number): Promise<void> {
     console.log(`Running insert test with ${count} documents...`);
     const mongoCollection = this.mongoDB.collection('users');
 
     // MongoDB test
     const mongoStartTime = performance.now();
+    const mongoStartUsage = this.getResourceUsage();
     for (let i = 0; i < count; i++) {
       const userData = this.generateUserData();
       await mongoCollection.insertOne(userData);
@@ -92,9 +124,11 @@ class DatabaseBenchmark {
     const mongoTime = (performance.now() - mongoStartTime) / 1000;
     console.log(`\nMongoDB: ${count} documents inserted in ${mongoTime.toFixed(2)} seconds`);
     console.log(`MongoDB average insert speed: ${(count / mongoTime).toFixed(2)} docs/sec`);
+    this.logResourceUsage('Insert', 'MongoDB', mongoStartUsage);
 
     // PostgreSQL test
     const pgStartTime = performance.now();
+    const pgStartUsage = this.getResourceUsage();
     for (let i = 0; i < count; i++) {
       const userData = this.generateUserData();
       await this.pgClient.query('INSERT INTO users (data) VALUES ($1)', [userData]);
@@ -103,6 +137,7 @@ class DatabaseBenchmark {
     const pgTime = (performance.now() - pgStartTime) / 1000;
     console.log(`\nPostgreSQL: ${count} documents inserted in ${pgTime.toFixed(2)} seconds`);
     console.log(`PostgreSQL average insert speed: ${(count / pgTime).toFixed(2)} docs/sec`);
+    this.logResourceUsage('Insert', 'PostgreSQL', pgStartUsage);
   }
 
   async complexQuery(): Promise<void> {
@@ -111,6 +146,7 @@ class DatabaseBenchmark {
 
     // MongoDB test
     const mongoStartTime = performance.now();
+    const mongoStartUsage = this.getResourceUsage();
     const mongoResult = await mongoCollection.find({
       'preferences.notifications.email': true
     }).explain();
@@ -118,9 +154,11 @@ class DatabaseBenchmark {
 
     console.log(`\nMongoDB query time: ${mongoTime.toFixed(2)} seconds`);
     console.log('MongoDB query plan:', mongoResult);
+    this.logResourceUsage('Query', 'MongoDB', mongoStartUsage);
 
     // PostgreSQL test
     const pgStartTime = performance.now();
+    const pgStartUsage = this.getResourceUsage();
     const pgResult = await this.pgClient.query(`
       EXPLAIN ANALYZE
       SELECT * FROM users
@@ -131,6 +169,7 @@ class DatabaseBenchmark {
     console.log(`\nPostgreSQL query time: ${pgTime.toFixed(2)} seconds`);
     console.log('PostgreSQL query plan:');
     pgResult.rows.forEach(row => console.log(row));
+    this.logResourceUsage('Query', 'PostgreSQL', pgStartUsage);
   }
 
   async aggregation(): Promise<void> {
@@ -139,6 +178,7 @@ class DatabaseBenchmark {
 
     // MongoDB test
     const mongoStartTime = performance.now();
+    const mongoStartUsage = this.getResourceUsage();
     await mongoCollection.aggregate([
       { $unwind: '$orders' },
       {
@@ -151,9 +191,11 @@ class DatabaseBenchmark {
     const mongoTime = (performance.now() - mongoStartTime) / 1000;
 
     console.log(`\nMongoDB aggregation time: ${mongoTime.toFixed(2)} seconds`);
+    this.logResourceUsage('Aggregation', 'MongoDB', mongoStartUsage);
 
     // PostgreSQL test
     const pgStartTime = performance.now();
+    const pgStartUsage = this.getResourceUsage();
     await this.pgClient.query(`
       SELECT 
         (data->>'_id') as user_id,
@@ -165,6 +207,7 @@ class DatabaseBenchmark {
     const pgTime = (performance.now() - pgStartTime) / 1000;
 
     console.log(`\nPostgreSQL aggregation time: ${pgTime.toFixed(2)} seconds`);
+    this.logResourceUsage('Aggregation', 'PostgreSQL', pgStartUsage);
   }
 
   async close(): Promise<void> {
