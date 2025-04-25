@@ -1,0 +1,8 @@
+pymongo==4.6.1
+psycopg2-binary==2.9.9
+click==8.1.7
+tqdm==4.66.1
+pandas==2.1.4
+fake-factory==9999.9.9
+Faker==22.0.0
+python-dotenv==1.0.0
