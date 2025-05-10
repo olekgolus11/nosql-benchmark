@@ -114,18 +114,25 @@ class DatabaseBenchmark {
     console.log(`System Memory Usage: ${endUsage.memory.memoryUsagePercent}%`);
   }
 
-  async insertTest(count: number): Promise<void> {
-    console.log(`Running insert test with ${count} documents...`);
+  async insertTest(count: number, concurrency: number = 25): Promise<void> {
+    const CONCURRENCY = concurrency;
+    const docsPerClient = Math.floor(count / CONCURRENCY);
+    const remainder = count % CONCURRENCY;
+    console.log(`Running insert test with ${count} documents using ${CONCURRENCY} concurrent clients...`);
     const mongoCollection = this.mongoDB.collection('users');
 
     // MongoDB test
     const mongoStartTime = performance.now();
     const mongoStartUsage = this.getResourceUsage();
-    for (let i = 0; i < count; i++) {
-      const userData = this.generateUserData();
-      await mongoCollection.insertOne(userData);
-      if (i % 100 === 0) process.stdout.write(`\rMongoDB progress: ${Math.round((i / count) * 100)}%`);
-    }
+    await Promise.all(Array.from({ length: CONCURRENCY }, (_, clientIdx) => {
+      const myCount = docsPerClient + (clientIdx < remainder ? 1 : 0);
+      return (async () => {
+        for (let i = 0; i < myCount; i++) {
+          const userData = this.generateUserData();
+          await mongoCollection.insertOne(userData);
+        }
+      })();
+    }));
     const mongoTime = (performance.now() - mongoStartTime) / 1000;
     console.log(`\nMongoDB: ${count} documents inserted in ${mongoTime.toFixed(2)} seconds`);
     console.log(`MongoDB average insert speed: ${(count / mongoTime).toFixed(2)} docs/sec`);
@@ -134,162 +141,141 @@ class DatabaseBenchmark {
     // PostgreSQL test
     const pgStartTime = performance.now();
     const pgStartUsage = this.getResourceUsage();
-    for (let i = 0; i < count; i++) {
-      const userData = this.generateUserData();
-      await this.pgClient.query('INSERT INTO users (data) VALUES ($1)', [userData]);
-      if (i % 100 === 0) process.stdout.write(`\rPostgreSQL progress: ${Math.round((i / count) * 100)}%`);
-    }
+    await Promise.all(Array.from({ length: CONCURRENCY }, (_, clientIdx) => {
+      const myCount = docsPerClient + (clientIdx < remainder ? 1 : 0);
+      return (async () => {
+        for (let i = 0; i < myCount; i++) {
+          const userData = this.generateUserData();
+          await this.pgClient.query('INSERT INTO users (data) VALUES ($1)', [userData]);
+        }
+      })();
+    }));
     const pgTime = (performance.now() - pgStartTime) / 1000;
     console.log(`\nPostgreSQL: ${count} documents inserted in ${pgTime.toFixed(2)} seconds`);
     console.log(`PostgreSQL average insert speed: ${(count / pgTime).toFixed(2)} docs/sec`);
     this.logResourceUsage('Insert', 'PostgreSQL', pgStartUsage);
   }
 
-  async complexQuery(): Promise<void> {
+  async complexQuery(concurrency: number = 25): Promise<void> {
+    const CONCURRENCY = concurrency;
     console.log('Running complex query test...');
     const mongoCollection = this.mongoDB.collection('users');
 
     // MongoDB test
     const mongoStartTime = performance.now();
     const mongoStartUsage = this.getResourceUsage();
-    const mongoResult = await mongoCollection.find({
-      'preferences.notifications.email': true
-    }).explain();
+    await Promise.all(Array.from({ length: CONCURRENCY }, () =>
+      mongoCollection.find({ 'preferences.notifications.email': true }).explain()
+    ));
     const mongoTime = (performance.now() - mongoStartTime) / 1000;
-
     console.log(`\nMongoDB query time: ${mongoTime.toFixed(2)} seconds`);
+    // Only print one plan for brevity
+    const mongoResult = await mongoCollection.find({ 'preferences.notifications.email': true }).explain();
     console.log('MongoDB query plan:', mongoResult);
     this.logResourceUsage('Query', 'MongoDB', mongoStartUsage);
 
     // PostgreSQL test
     const pgStartTime = performance.now();
     const pgStartUsage = this.getResourceUsage();
-    const pgResult = await this.pgClient.query(`
-      EXPLAIN ANALYZE
-      SELECT * FROM users
-      WHERE data->'preferences'->'notifications'->>'email' = 'true'
-    `);
+    await Promise.all(Array.from({ length: CONCURRENCY }, () =>
+      this.pgClient.query(`EXPLAIN ANALYZE SELECT * FROM users WHERE data->'preferences'->'notifications'->>'email' = 'true'`)
+    ));
     const pgTime = (performance.now() - pgStartTime) / 1000;
-
     console.log(`\nPostgreSQL query time: ${pgTime.toFixed(2)} seconds`);
+    const pgResult = await this.pgClient.query(`EXPLAIN ANALYZE SELECT * FROM users WHERE data->'preferences'->'notifications'->>'email' = 'true'`);
     console.log('PostgreSQL query plan:');
     pgResult.rows.forEach(row => console.log(row));
     this.logResourceUsage('Query', 'PostgreSQL', pgStartUsage);
   }
 
-  async aggregation(): Promise<void> {
+  async aggregation(concurrency: number = 25): Promise<void> {
+    const CONCURRENCY = concurrency;
     console.log('Running aggregation test...');
     const mongoCollection = this.mongoDB.collection('users');
 
     // MongoDB test
     const mongoStartTime = performance.now();
     const mongoStartUsage = this.getResourceUsage();
-    await mongoCollection.aggregate([
-      { $unwind: '$orders' },
-      {
-        $group: {
-          _id: '$_id',
-          total_amount: { $sum: '$orders.amount' }
-        }
-      }
-    ]).toArray();
+    await Promise.all(Array.from({ length: CONCURRENCY }, () =>
+      mongoCollection.aggregate([
+        { $unwind: '$orders' },
+        { $group: { _id: '$_id', total_amount: { $sum: '$orders.amount' } } }
+      ]).toArray()
+    ));
     const mongoTime = (performance.now() - mongoStartTime) / 1000;
-
     console.log(`\nMongoDB aggregation time: ${mongoTime.toFixed(2)} seconds`);
     this.logResourceUsage('Aggregation', 'MongoDB', mongoStartUsage);
 
     // PostgreSQL test
     const pgStartTime = performance.now();
     const pgStartUsage = this.getResourceUsage();
-    await this.pgClient.query(`
-      SELECT 
-        (data->>'_id') as user_id,
-        SUM(CAST(order_data->>'amount' AS DECIMAL))
-      FROM users,
-        jsonb_array_elements(data->'orders') AS order_data
-      GROUP BY user_id;
-    `);
+    await Promise.all(Array.from({ length: CONCURRENCY }, () =>
+      this.pgClient.query(`SELECT (data->>'_id') as user_id, SUM(CAST(order_data->>'amount' AS DECIMAL)) FROM users, jsonb_array_elements(data->'orders') AS order_data GROUP BY user_id;`)
+    ));
     const pgTime = (performance.now() - pgStartTime) / 1000;
-
     console.log(`\nPostgreSQL aggregation time: ${pgTime.toFixed(2)} seconds`);
     this.logResourceUsage('Aggregation', 'PostgreSQL', pgStartUsage);
   }
 
-  async fullTextSearch(): Promise<void> {
+  async fullTextSearch(concurrency: number = 25): Promise<void> {
+    const CONCURRENCY = concurrency;
     console.log('Running full-text search benchmark...');
     const mongoCollection = this.mongoDB.collection('users');
-    const searchTerm = faker.word.sample(); // Random word to search for
-    
-    // Create text index for MongoDB if it doesn't exist
+    const searchTerm = faker.word.sample();
     try {
       await mongoCollection.createIndex({ "orders.items.product": "text" });
       console.log('MongoDB text index created or already exists');
     } catch (error) {
       console.error('Error creating MongoDB text index:', error);
     }
-    
     // MongoDB test - simple text search
     console.log(`\nPerforming MongoDB text search for term: "${searchTerm}"`);
     const mongoStartTime = performance.now();
     const mongoStartUsage = this.getResourceUsage();
-    
+    await Promise.all(Array.from({ length: CONCURRENCY }, () =>
+      mongoCollection.find(
+        { $text: { $search: searchTerm } },
+        { projection: { score: { $meta: "textScore" } } }
+      ).sort({ score: { $meta: "textScore" } }).limit(20).toArray()
+    ));
+    const mongoTime = (performance.now() - mongoStartTime) / 1000;
     const mongoResult = await mongoCollection.find(
       { $text: { $search: searchTerm } },
       { projection: { score: { $meta: "textScore" } } }
     ).sort({ score: { $meta: "textScore" } }).limit(20).toArray();
-    
-    const mongoTime = (performance.now() - mongoStartTime) / 1000;
     console.log(`MongoDB found ${mongoResult.length} results in ${mongoTime.toFixed(2)} seconds`);
     this.logResourceUsage('Text Search', 'MongoDB', mongoStartUsage);
-    
     // PostgreSQL test - full-text search
     console.log(`\nPerforming PostgreSQL text search for term: "${searchTerm}"`);
     const pgStartTime = performance.now();
     const pgStartUsage = this.getResourceUsage();
-    
-    const pgResult = await this.pgClient.query(`
-      SELECT id, data 
-      FROM users, 
-           jsonb_array_elements(data->'orders') as o,
-           jsonb_array_elements(o->'items') as i
-      WHERE i->>'product' ILIKE $1
-      LIMIT 20
-    `, [`%${searchTerm}%`]);
-    
+    await Promise.all(Array.from({ length: CONCURRENCY }, () =>
+      this.pgClient.query(`SELECT id, data FROM users, jsonb_array_elements(data->'orders') as o, jsonb_array_elements(o->'items') as i WHERE i->>'product' ILIKE $1 LIMIT 20`, [`%${searchTerm}%`])
+    ));
     const pgTime = (performance.now() - pgStartTime) / 1000;
+    const pgResult = await this.pgClient.query(`SELECT id, data FROM users, jsonb_array_elements(data->'orders') as o, jsonb_array_elements(o->'items') as i WHERE i->>'product' ILIKE $1 LIMIT 20`, [`%${searchTerm}%`]);
     console.log(`PostgreSQL found ${pgResult.rowCount} results in ${pgTime.toFixed(2)} seconds`);
     this.logResourceUsage('Text Search', 'PostgreSQL', pgStartUsage);
-    
     // More complex search patterns
     console.log('\nRunning complex pattern search...');
-    
-    // MongoDB regex search (more flexible than text index)
+    // MongoDB regex search
     const mongoRegexStartTime = performance.now();
     const mongoRegexStartUsage = this.getResourceUsage();
-    
-    const mongoRegexResult = await mongoCollection.find({
-      'orders.items.product': { $regex: new RegExp(searchTerm, 'i') }
-    }).limit(20).toArray();
-    
+    await Promise.all(Array.from({ length: CONCURRENCY }, () =>
+      mongoCollection.find({ 'orders.items.product': { $regex: new RegExp(searchTerm, 'i') } }).limit(20).toArray()
+    ));
     const mongoRegexTime = (performance.now() - mongoRegexStartTime) / 1000;
+    const mongoRegexResult = await mongoCollection.find({ 'orders.items.product': { $regex: new RegExp(searchTerm, 'i') } }).limit(20).toArray();
     console.log(`MongoDB regex search found ${mongoRegexResult.length} results in ${mongoRegexTime.toFixed(2)} seconds`);
     this.logResourceUsage('Regex Search', 'MongoDB', mongoRegexStartUsage);
-    
     // PostgreSQL trigram similarity search
     const pgSimilarityStartTime = performance.now();
     const pgSimilarityStartUsage = this.getResourceUsage();
-    
-    const pgSimilarityResult = await this.pgClient.query(`
-      SELECT id, data, similarity(i->>'product', $1) as sim_score
-      FROM users, 
-           jsonb_array_elements(data->'orders') as o,
-           jsonb_array_elements(o->'items') as i
-      WHERE similarity(i->>'product', $1) > 0.3
-      ORDER BY sim_score DESC
-      LIMIT 20
-    `, [searchTerm]);
-    
+    await Promise.all(Array.from({ length: CONCURRENCY }, () =>
+      this.pgClient.query(`SELECT id, data, similarity(i->>'product', $1) as sim_score FROM users, jsonb_array_elements(data->'orders') as o, jsonb_array_elements(o->'items') as i WHERE similarity(i->>'product', $1) > 0.3 ORDER BY sim_score DESC LIMIT 20`, [searchTerm])
+    ));
     const pgSimilarityTime = (performance.now() - pgSimilarityStartTime) / 1000;
+    const pgSimilarityResult = await this.pgClient.query(`SELECT id, data, similarity(i->>'product', $1) as sim_score FROM users, jsonb_array_elements(data->'orders') as o, jsonb_array_elements(o->'items') as i WHERE similarity(i->>'product', $1) > 0.3 ORDER BY sim_score DESC LIMIT 20`, [searchTerm]);
     console.log(`PostgreSQL similarity search found ${pgSimilarityResult.rowCount} results in ${pgSimilarityTime.toFixed(2)} seconds`);
     this.logResourceUsage('Similarity Search', 'PostgreSQL', pgSimilarityStartUsage);
   }
@@ -310,12 +296,13 @@ program
 program.command('insert-test')
   .description('Run document insert performance test')
   .option('--count <number>', 'Number of documents to insert', '1000000')
+  .option('--concurrency <number>', 'Number of concurrent clients', '25')
   .action(async (options) => {
     const benchmark = new DatabaseBenchmark();
     try {
       await benchmark.connect();
       await benchmark.setupPostgres();
-      await benchmark.insertTest(parseInt(options.count));
+      await benchmark.insertTest(parseInt(options.count), parseInt(options.concurrency));
     } finally {
       await benchmark.close();
     }
@@ -323,11 +310,12 @@ program.command('insert-test')
 
 program.command('complex-query')
   .description('Run complex JSON query performance test')
-  .action(async () => {
+  .option('--concurrency <number>', 'Number of concurrent clients', '25')
+  .action(async (options) => {
     const benchmark = new DatabaseBenchmark();
     try {
       await benchmark.connect();
-      await benchmark.complexQuery();
+      await benchmark.complexQuery(parseInt(options.concurrency));
     } finally {
       await benchmark.close();
     }
@@ -335,11 +323,12 @@ program.command('complex-query')
 
 program.command('aggregation')
   .description('Run aggregation and filtering test')
-  .action(async () => {
+  .option('--concurrency <number>', 'Number of concurrent clients', '25')
+  .action(async (options) => {
     const benchmark = new DatabaseBenchmark();
     try {
       await benchmark.connect();
-      await benchmark.aggregation();
+      await benchmark.aggregation(parseInt(options.concurrency));
     } finally {
       await benchmark.close();
     }
@@ -347,12 +336,13 @@ program.command('aggregation')
 
 program.command('full-text-search')
   .description('Run full-text search performance test')
-  .action(async () => {
+  .option('--concurrency <number>', 'Number of concurrent clients', '25')
+  .action(async (options) => {
     const benchmark = new DatabaseBenchmark();
     try {
       await benchmark.connect();
       await benchmark.setupPostgres(); // Ensure indexes are created
-      await benchmark.fullTextSearch();
+      await benchmark.fullTextSearch(parseInt(options.concurrency));
     } finally {
       await benchmark.close();
     }
