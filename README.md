@@ -7,6 +7,7 @@ A performance benchmarking tool for comparing MongoDB and PostgreSQL JSON capabi
 - Document insertion performance testing
 - Complex JSON query performance analysis
 - Aggregation and filtering benchmarks
+- Full-text search performance comparison
 - Type-safe implementation with TypeScript
 - High-performance execution with Bun.js runtime
 
@@ -51,6 +52,12 @@ bun run src/benchmark.ts complex-query
 Test aggregation and filtering performance:
 ```bash
 bun run src/benchmark.ts aggregation
+```
+
+### Full-Text Search Test
+Test full-text search capabilities and performance:
+```bash
+bun run src/benchmark.ts full-text-search
 ```
 
 ## Development

@@ -55,7 +55,12 @@ class DatabaseBenchmark {
       );
       CREATE INDEX IF NOT EXISTS idx_user_preferences ON users ((data->'preferences'->'notifications'->>'email'));
       CREATE INDEX IF NOT EXISTS idx_user_name ON users ((data->>'name'));
+      
+      -- Create GIN index for full-text search on product names
+      CREATE EXTENSION IF NOT EXISTS pg_trgm;
+      CREATE INDEX IF NOT EXISTS idx_product_search ON users USING GIN (data jsonb_ops);
     `);
+
   }
 
   generateUserData(): UserData {
@@ -210,6 +215,85 @@ class DatabaseBenchmark {
     this.logResourceUsage('Aggregation', 'PostgreSQL', pgStartUsage);
   }
 
+  async fullTextSearch(): Promise<void> {
+    console.log('Running full-text search benchmark...');
+    const mongoCollection = this.mongoDB.collection('users');
+    const searchTerm = faker.word.sample(); // Random word to search for
+    
+    // Create text index for MongoDB if it doesn't exist
+    try {
+      await mongoCollection.createIndex({ "orders.items.product": "text" });
+      console.log('MongoDB text index created or already exists');
+    } catch (error) {
+      console.error('Error creating MongoDB text index:', error);
+    }
+    
+    // MongoDB test - simple text search
+    console.log(`\nPerforming MongoDB text search for term: "${searchTerm}"`);
+    const mongoStartTime = performance.now();
+    const mongoStartUsage = this.getResourceUsage();
+    
+    const mongoResult = await mongoCollection.find(
+      { $text: { $search: searchTerm } },
+      { projection: { score: { $meta: "textScore" } } }
+    ).sort({ score: { $meta: "textScore" } }).limit(20).toArray();
+    
+    const mongoTime = (performance.now() - mongoStartTime) / 1000;
+    console.log(`MongoDB found ${mongoResult.length} results in ${mongoTime.toFixed(2)} seconds`);
+    this.logResourceUsage('Text Search', 'MongoDB', mongoStartUsage);
+    
+    // PostgreSQL test - full-text search
+    console.log(`\nPerforming PostgreSQL text search for term: "${searchTerm}"`);
+    const pgStartTime = performance.now();
+    const pgStartUsage = this.getResourceUsage();
+    
+    const pgResult = await this.pgClient.query(`
+      SELECT id, data 
+      FROM users, 
+           jsonb_array_elements(data->'orders') as o,
+           jsonb_array_elements(o->'items') as i
+      WHERE i->>'product' ILIKE $1
+      LIMIT 20
+    `, [`%${searchTerm}%`]);
+    
+    const pgTime = (performance.now() - pgStartTime) / 1000;
+    console.log(`PostgreSQL found ${pgResult.rowCount} results in ${pgTime.toFixed(2)} seconds`);
+    this.logResourceUsage('Text Search', 'PostgreSQL', pgStartUsage);
+    
+    // More complex search patterns
+    console.log('\nRunning complex pattern search...');
+    
+    // MongoDB regex search (more flexible than text index)
+    const mongoRegexStartTime = performance.now();
+    const mongoRegexStartUsage = this.getResourceUsage();
+    
+    const mongoRegexResult = await mongoCollection.find({
+      'orders.items.product': { $regex: new RegExp(searchTerm, 'i') }
+    }).limit(20).toArray();
+    
+    const mongoRegexTime = (performance.now() - mongoRegexStartTime) / 1000;
+    console.log(`MongoDB regex search found ${mongoRegexResult.length} results in ${mongoRegexTime.toFixed(2)} seconds`);
+    this.logResourceUsage('Regex Search', 'MongoDB', mongoRegexStartUsage);
+    
+    // PostgreSQL trigram similarity search
+    const pgSimilarityStartTime = performance.now();
+    const pgSimilarityStartUsage = this.getResourceUsage();
+    
+    const pgSimilarityResult = await this.pgClient.query(`
+      SELECT id, data, similarity(i->>'product', $1) as sim_score
+      FROM users, 
+           jsonb_array_elements(data->'orders') as o,
+           jsonb_array_elements(o->'items') as i
+      WHERE similarity(i->>'product', $1) > 0.3
+      ORDER BY sim_score DESC
+      LIMIT 20
+    `, [searchTerm]);
+    
+    const pgSimilarityTime = (performance.now() - pgSimilarityStartTime) / 1000;
+    console.log(`PostgreSQL similarity search found ${pgSimilarityResult.rowCount} results in ${pgSimilarityTime.toFixed(2)} seconds`);
+    this.logResourceUsage('Similarity Search', 'PostgreSQL', pgSimilarityStartUsage);
+  }
+  
   async close(): Promise<void> {
     await this.mongoClient.close();
     await this.pgClient.end();
@@ -256,6 +340,19 @@ program.command('aggregation')
     try {
       await benchmark.connect();
       await benchmark.aggregation();
+    } finally {
+      await benchmark.close();
+    }
+  });
+
+program.command('full-text-search')
+  .description('Run full-text search performance test')
+  .action(async () => {
+    const benchmark = new DatabaseBenchmark();
+    try {
+      await benchmark.connect();
+      await benchmark.setupPostgres(); // Ensure indexes are created
+      await benchmark.fullTextSearch();
     } finally {
       await benchmark.close();
     }
