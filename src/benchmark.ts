@@ -121,6 +121,15 @@ class DatabaseBenchmark {
     console.log(`Running insert test with ${count} documents using ${CONCURRENCY} concurrent clients...`);
     const mongoCollection = this.mongoDB.collection('users');
 
+    // Shared progress counter for MongoDB
+    let mongoProgress = 0;
+    const updateMongoProgress = () => {
+      mongoProgress++;
+      if (mongoProgress % 100 === 0 || mongoProgress === count) {
+        process.stdout.write(`\rMongoDB progress: ${Math.round((mongoProgress / count) * 100)}%`);
+      }
+    };
+
     // MongoDB test
     const mongoStartTime = performance.now();
     const mongoStartUsage = this.getResourceUsage();
@@ -130,15 +139,25 @@ class DatabaseBenchmark {
         for (let i = 0; i < myCount; i++) {
           const userData = this.generateUserData();
           await mongoCollection.insertOne(userData);
+          updateMongoProgress();
         }
       })();
     }));
     const mongoTime = (performance.now() - mongoStartTime) / 1000;
-    console.log(`\nMongoDB: ${count} documents inserted in ${mongoTime.toFixed(2)} seconds`);
+    console.log(`\n\nMongoDB: ${count} documents inserted in ${mongoTime.toFixed(2)} seconds`);
     console.log(`MongoDB average insert speed: ${(count / mongoTime).toFixed(2)} docs/sec`);
     this.logResourceUsage('Insert', 'MongoDB', mongoStartUsage);
 
     // PostgreSQL test
+    // Shared progress counter for PostgreSQL
+    let pgProgress = 0;
+    const updatePgProgress = () => {
+      pgProgress++;
+      if (pgProgress % 100 === 0 || pgProgress === count) {
+        process.stdout.write(`\rPostgreSQL progress: ${Math.round((pgProgress / count) * 100)}%`);
+      }
+    };
+    
     const pgStartTime = performance.now();
     const pgStartUsage = this.getResourceUsage();
     await Promise.all(Array.from({ length: CONCURRENCY }, (_, clientIdx) => {
@@ -147,11 +166,12 @@ class DatabaseBenchmark {
         for (let i = 0; i < myCount; i++) {
           const userData = this.generateUserData();
           await this.pgClient.query('INSERT INTO users (data) VALUES ($1)', [userData]);
+          updatePgProgress();
         }
       })();
     }));
     const pgTime = (performance.now() - pgStartTime) / 1000;
-    console.log(`\nPostgreSQL: ${count} documents inserted in ${pgTime.toFixed(2)} seconds`);
+    console.log(`\n\nPostgreSQL: ${count} documents inserted in ${pgTime.toFixed(2)} seconds`);
     console.log(`PostgreSQL average insert speed: ${(count / pgTime).toFixed(2)} docs/sec`);
     this.logResourceUsage('Insert', 'PostgreSQL', pgStartUsage);
   }
