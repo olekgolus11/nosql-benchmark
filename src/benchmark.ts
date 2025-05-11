@@ -464,18 +464,8 @@ class DatabaseBenchmark {
       console.log(`PostgreSQL found ${pgResult.rowCount} results in ${pgTime.toFixed(2)} seconds`);
       this.logResourceUsage('Text Search', 'PostgreSQL', pgStartUsage);
       
-      // Generate visualization chart for this search term
-      if (searchCount > 1) {
-        await this.visualizer.generateSearchChart(
-          mongoTime, 
-          pgTime, 
-          this.concurrency, 
-          searchTerm, 
-          mongoDataPoints, 
-          pgDataPoints,
-          `search_${i+1}_of_${searchCount}`
-        );
-      }
+      // Skip generating individual search charts as requested by user
+      // We'll only generate the summary chart at the end
       
       // More complex search patterns (only for the first search term if multiple)
       if (i === 0) {
@@ -523,14 +513,19 @@ class DatabaseBenchmark {
         allSearchTerms
       );
     } else {
-      // For a single search, use the original chart
-      await this.visualizer.generateSearchChart(
-        totalMongoTime, 
-        totalPgTime, 
-        this.concurrency, 
-        allSearchTerms[0], 
-        [], // We don't have aggregated data points for a single search
-        []
+      // For a single search, we'll still generate a summary chart
+      // but we'll skip the individual search chart as requested
+      console.log(`\nSummary: Single search term "${allSearchTerms[0]}"`); 
+      console.log(`MongoDB search time: ${totalMongoTime.toFixed(2)} seconds`);
+      console.log(`PostgreSQL search time: ${totalPgTime.toFixed(2)} seconds`);
+      
+      // Generate a summary-style chart for the single search
+      await this.visualizer.generateSearchSummaryChart(
+        totalMongoTime,
+        totalPgTime,
+        this.concurrency,
+        1,
+        allSearchTerms
       );
     }
     

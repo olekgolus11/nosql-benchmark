@@ -259,7 +259,7 @@ export class BenchmarkVisualizer {
       }
     };
 
-    const outputPath = path.join(process.cwd(), 'outputs', 'search_summary.png');
+    const outputPath = path.join(process.cwd(), 'outputs', `full_text_search_${concurrency}_${searchCount}.png`);
     const buffer = await this.chartJSNodeCanvas.renderToBuffer(configuration as any);
     fs.writeFileSync(outputPath, buffer);
     console.log(`Chart saved to ${outputPath}`);
