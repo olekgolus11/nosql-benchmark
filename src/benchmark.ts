@@ -4,6 +4,7 @@ import { MongoClient, Db } from 'mongodb';
 import pg from 'pg';
 import { faker } from '@faker-js/faker';
 import os from 'os';
+import { BenchmarkVisualizer } from './visualization';
 
 // Load environment variables
 config();
@@ -36,6 +37,7 @@ class DatabaseBenchmark {
   private mongoDbs: Db[] = [];
   private pgClients: pg.Client[] = [];
   private concurrency: number;
+  private visualizer: BenchmarkVisualizer;
 
   constructor(concurrency: number = 25) {
     this.concurrency = concurrency;
@@ -45,6 +47,8 @@ class DatabaseBenchmark {
       this.mongoDbs.push(this.mongoClients[i].db('benchmark'));
       this.pgClients.push(new pg.Client(PG_CONNECTION));
     }
+    // Initialize visualizer
+    this.visualizer = new BenchmarkVisualizer();
   }
 
   async connect(): Promise<void> {
@@ -188,6 +192,10 @@ class DatabaseBenchmark {
     console.log(`\n\nPostgreSQL: ${count} documents inserted in ${pgTime.toFixed(2)} seconds`);
     console.log(`PostgreSQL average insert speed: ${(count / pgTime).toFixed(2)} docs/sec`);
     this.logResourceUsage('Insert', 'PostgreSQL', pgStartUsage);
+    
+    // Generate visualization chart
+    await this.visualizer.generateInsertChart(mongoTime, pgTime, count, this.concurrency);
+    console.log('Generated performance comparison chart for insert operations');
   }
 
   async complexQuery(concurrency: number = 25): Promise<void> {
@@ -224,6 +232,10 @@ class DatabaseBenchmark {
     console.log('PostgreSQL query plan:');
     pgResult.rows.forEach(row => console.log(row));
     this.logResourceUsage('Query', 'PostgreSQL', pgStartUsage);
+    
+    // Generate visualization chart
+    await this.visualizer.generateQueryChart(mongoTime, pgTime, this.concurrency);
+    console.log('Generated performance comparison chart for complex query operations');
   }
 
   async aggregation(concurrency: number = 25): Promise<void> {
@@ -257,6 +269,10 @@ class DatabaseBenchmark {
     const pgTime = (performance.now() - pgStartTime) / 1000;
     console.log(`\nPostgreSQL aggregation time: ${pgTime.toFixed(2)} seconds`);
     this.logResourceUsage('Aggregation', 'PostgreSQL', pgStartUsage);
+    
+    // Generate visualization chart
+    await this.visualizer.generateAggregationChart(mongoTime, pgTime, this.concurrency);
+    console.log('Generated performance comparison chart for aggregation operations');
   }
 
   async fullTextSearch(concurrency: number = 25): Promise<void> {
@@ -332,6 +348,10 @@ class DatabaseBenchmark {
     const pgSimilarityResult = await this.pgClients[0].query(`SELECT id, data, similarity(i->>'product', $1) as sim_score FROM users, jsonb_array_elements(data->'orders') as o, jsonb_array_elements(o->'items') as i WHERE similarity(i->>'product', $1) > 0.3 ORDER BY sim_score DESC LIMIT 20`, [searchTerm]);
     console.log(`PostgreSQL similarity search found ${pgSimilarityResult.rowCount} results in ${pgSimilarityTime.toFixed(2)} seconds`);
     this.logResourceUsage('Similarity Search', 'PostgreSQL', pgSimilarityStartUsage);
+    
+    // Generate visualization chart for text search
+    await this.visualizer.generateSearchChart(mongoTime, pgTime, this.concurrency, searchTerm);
+    console.log('Generated performance comparison chart for full-text search operations');
   }
   
   async close(): Promise<void> {
