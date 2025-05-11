@@ -33,9 +33,9 @@ interface UserData {
 }
 
 class DatabaseBenchmark {
-  private mongoClients: MongoClient[] = [];
-  private mongoDbs: Db[] = [];
-  private pgClients: pg.Client[] = [];
+  public mongoClients: MongoClient[] = [];
+  public mongoDbs: Db[] = [];
+  public pgClients: pg.Client[] = [];
   private concurrency: number;
   private visualizer: BenchmarkVisualizer;
 
@@ -49,8 +49,8 @@ class DatabaseBenchmark {
     }
     // Initialize visualizer
     this.visualizer = new BenchmarkVisualizer();
+    
   }
-
   async connect(): Promise<void> {
     // Connect all clients in parallel
     await Promise.all([
@@ -138,11 +138,19 @@ class DatabaseBenchmark {
     const remainder = count % this.concurrency;
     console.log(`Running insert test with ${count} documents using ${this.concurrency} concurrent clients...`);
 
+    // Data points for visualization
+    const mongoDataPoints: { time: number; operations: number }[] = [];
+    const pgDataPoints: { time: number; operations: number }[] = [];
+
     // Shared progress counter for MongoDB
     let mongoProgress = 0;
     const updateMongoProgress = () => {
       mongoProgress++;
-      if (mongoProgress % 100 === 0 || mongoProgress === count) {
+      // Record data point every 5% of progress or at least 10 points
+      const recordInterval = Math.max(Math.floor(count / 20), 100);
+      if (mongoProgress % recordInterval === 0 || mongoProgress === count) {
+        const currentTime = (performance.now() - mongoStartTime) / 1000;
+        mongoDataPoints.push({ time: currentTime, operations: mongoProgress });
         process.stdout.write(`\rMongoDB progress: ${Math.round((mongoProgress / count) * 100)}%`);
       }
     };
@@ -150,6 +158,9 @@ class DatabaseBenchmark {
     // MongoDB test
     const mongoStartTime = performance.now();
     const mongoStartUsage = this.getResourceUsage();
+    // Add starting point
+    mongoDataPoints.push({ time: 0, operations: 0 });
+    
     await Promise.all(this.mongoDbs.map((db, clientIdx) => {
       const mongoCollection = db.collection('users');
       const myCount = docsPerClient + (clientIdx < remainder ? 1 : 0);
@@ -162,6 +173,9 @@ class DatabaseBenchmark {
       })();
     }));
     const mongoTime = (performance.now() - mongoStartTime) / 1000;
+    // Ensure we have the final point
+    mongoDataPoints.push({ time: mongoTime, operations: count });
+    
     console.log(`\n\nMongoDB: ${count} documents inserted in ${mongoTime.toFixed(2)} seconds`);
     console.log(`MongoDB average insert speed: ${(count / mongoTime).toFixed(2)} docs/sec`);
     this.logResourceUsage('Insert', 'MongoDB', mongoStartUsage);
@@ -171,13 +185,20 @@ class DatabaseBenchmark {
     let pgProgress = 0;
     const updatePgProgress = () => {
       pgProgress++;
-      if (pgProgress % 100 === 0 || pgProgress === count) {
+      // Record data point every 5% of progress or at least 10 points
+      const recordInterval = Math.max(Math.floor(count / 20), 100);
+      if (pgProgress % recordInterval === 0 || pgProgress === count) {
+        const currentTime = (performance.now() - pgStartTime) / 1000;
+        pgDataPoints.push({ time: currentTime, operations: pgProgress });
         process.stdout.write(`\rPostgreSQL progress: ${Math.round((pgProgress / count) * 100)}%`);
       }
     };
     
     const pgStartTime = performance.now();
     const pgStartUsage = this.getResourceUsage();
+    // Add starting point
+    pgDataPoints.push({ time: 0, operations: 0 });
+    
     await Promise.all(this.pgClients.map((client, clientIdx) => {
       const myCount = docsPerClient + (clientIdx < remainder ? 1 : 0);
       return (async () => {
@@ -189,12 +210,15 @@ class DatabaseBenchmark {
       })();
     }));
     const pgTime = (performance.now() - pgStartTime) / 1000;
+    // Ensure we have the final point
+    pgDataPoints.push({ time: pgTime, operations: count });
+    
     console.log(`\n\nPostgreSQL: ${count} documents inserted in ${pgTime.toFixed(2)} seconds`);
     console.log(`PostgreSQL average insert speed: ${(count / pgTime).toFixed(2)} docs/sec`);
     this.logResourceUsage('Insert', 'PostgreSQL', pgStartUsage);
     
-    // Generate visualization chart
-    await this.visualizer.generateInsertChart(mongoTime, pgTime, count, this.concurrency);
+    // Generate visualization chart with real-time data points
+    await this.visualizer.generateInsertChart(mongoTime, pgTime, count, this.concurrency, mongoDataPoints, pgDataPoints);
     console.log('Generated performance comparison chart for insert operations');
   }
 
@@ -206,14 +230,34 @@ class DatabaseBenchmark {
     
     console.log('Running complex query test...');
 
+    // Data points for visualization
+    const mongoDataPoints: { time: number; operations: number }[] = [];
+    const pgDataPoints: { time: number; operations: number }[] = [];
+    const totalOperations = this.concurrency; // One query per client
+
     // MongoDB test
     const mongoStartTime = performance.now();
     const mongoStartUsage = this.getResourceUsage();
-    await Promise.all(this.mongoDbs.map(db => {
+    // Add starting point
+    mongoDataPoints.push({ time: 0, operations: 0 });
+
+    // Track progress for MongoDB queries
+    let mongoCompleted = 0;
+    const mongoPromises = this.mongoDbs.map(db => {
       const mongoCollection = db.collection('users');
-      return mongoCollection.find({ 'preferences.notifications.email': true }).explain();
-    }));
+      return (async () => {
+        await mongoCollection.find({ 'preferences.notifications.email': true }).explain();
+        mongoCompleted++;
+        const currentTime = (performance.now() - mongoStartTime) / 1000;
+        mongoDataPoints.push({ time: currentTime, operations: mongoCompleted });
+      })();
+    });
+
+    await Promise.all(mongoPromises);
     const mongoTime = (performance.now() - mongoStartTime) / 1000;
+    // Ensure we have the final point
+    mongoDataPoints.push({ time: mongoTime, operations: totalOperations });
+    
     console.log(`\nMongoDB query time: ${mongoTime.toFixed(2)} seconds`);
     // Only print one plan for brevity
     const mongoResult = await this.mongoDbs[0].collection('users').find({ 'preferences.notifications.email': true }).explain();
@@ -223,18 +267,33 @@ class DatabaseBenchmark {
     // PostgreSQL test
     const pgStartTime = performance.now();
     const pgStartUsage = this.getResourceUsage();
-    await Promise.all(this.pgClients.map(client => 
-      client.query(`EXPLAIN ANALYZE SELECT * FROM users WHERE data->'preferences'->'notifications'->>'email' = 'true'`)
-    ));
+    // Add starting point
+    pgDataPoints.push({ time: 0, operations: 0 });
+
+    // Track progress for PostgreSQL queries
+    let pgCompleted = 0;
+    const pgPromises = this.pgClients.map(client => 
+      (async () => {
+        await client.query(`EXPLAIN ANALYZE SELECT * FROM users WHERE data->'preferences'->'notifications'->>'email' = 'true'`);
+        pgCompleted++;
+        const currentTime = (performance.now() - pgStartTime) / 1000;
+        pgDataPoints.push({ time: currentTime, operations: pgCompleted });
+      })()
+    );
+
+    await Promise.all(pgPromises);
     const pgTime = (performance.now() - pgStartTime) / 1000;
+    // Ensure we have the final point
+    pgDataPoints.push({ time: pgTime, operations: totalOperations });
+    
     console.log(`\nPostgreSQL query time: ${pgTime.toFixed(2)} seconds`);
     const pgResult = await this.pgClients[0].query(`EXPLAIN ANALYZE SELECT * FROM users WHERE data->'preferences'->'notifications'->>'email' = 'true'`);
     console.log('PostgreSQL query plan:');
     pgResult.rows.forEach(row => console.log(row));
     this.logResourceUsage('Query', 'PostgreSQL', pgStartUsage);
     
-    // Generate visualization chart
-    await this.visualizer.generateQueryChart(mongoTime, pgTime, this.concurrency);
+    // Generate visualization chart with real-time data points
+    await this.visualizer.generateQueryChart(mongoTime, pgTime, this.concurrency, mongoDataPoints, pgDataPoints);
     console.log('Generated performance comparison chart for complex query operations');
   }
 
@@ -246,32 +305,67 @@ class DatabaseBenchmark {
     
     console.log('Running aggregation test...');
 
+    // Data points for visualization
+    const mongoDataPoints: { time: number; operations: number }[] = [];
+    const pgDataPoints: { time: number; operations: number }[] = [];
+    const totalOperations = this.concurrency; // One aggregation per client
+
     // MongoDB test
     const mongoStartTime = performance.now();
     const mongoStartUsage = this.getResourceUsage();
-    await Promise.all(this.mongoDbs.map(db => {
+    // Add starting point
+    mongoDataPoints.push({ time: 0, operations: 0 });
+
+    // Track progress for MongoDB aggregations
+    let mongoCompleted = 0;
+    const mongoPromises = this.mongoDbs.map(db => {
       const mongoCollection = db.collection('users');
-      return mongoCollection.aggregate([
-        { $unwind: '$orders' },
-        { $group: { _id: '$_id', total_amount: { $sum: '$orders.amount' } } }
-      ]).toArray();
-    }));
+      return (async () => {
+        await mongoCollection.aggregate([
+          { $unwind: '$orders' },
+          { $group: { _id: '$_id', total_amount: { $sum: '$orders.amount' } } }
+        ]).toArray();
+        mongoCompleted++;
+        const currentTime = (performance.now() - mongoStartTime) / 1000;
+        mongoDataPoints.push({ time: currentTime, operations: mongoCompleted });
+      })();
+    });
+
+    await Promise.all(mongoPromises);
     const mongoTime = (performance.now() - mongoStartTime) / 1000;
+    // Ensure we have the final point
+    mongoDataPoints.push({ time: mongoTime, operations: totalOperations });
+    
     console.log(`\nMongoDB aggregation time: ${mongoTime.toFixed(2)} seconds`);
     this.logResourceUsage('Aggregation', 'MongoDB', mongoStartUsage);
 
     // PostgreSQL test
     const pgStartTime = performance.now();
     const pgStartUsage = this.getResourceUsage();
-    await Promise.all(this.pgClients.map(client => 
-      client.query(`SELECT (data->>'_id') as user_id, SUM(CAST(order_data->>'amount' AS DECIMAL)) FROM users, jsonb_array_elements(data->'orders') AS order_data GROUP BY user_id;`)
-    ));
+    // Add starting point
+    pgDataPoints.push({ time: 0, operations: 0 });
+
+    // Track progress for PostgreSQL aggregations
+    let pgCompleted = 0;
+    const pgPromises = this.pgClients.map(client => 
+      (async () => {
+        await client.query(`SELECT (data->>'_id') as user_id, SUM(CAST(order_data->>'amount' AS DECIMAL)) FROM users, jsonb_array_elements(data->'orders') AS order_data GROUP BY user_id;`);
+        pgCompleted++;
+        const currentTime = (performance.now() - pgStartTime) / 1000;
+        pgDataPoints.push({ time: currentTime, operations: pgCompleted });
+      })()
+    );
+
+    await Promise.all(pgPromises);
     const pgTime = (performance.now() - pgStartTime) / 1000;
+    // Ensure we have the final point
+    pgDataPoints.push({ time: pgTime, operations: totalOperations });
+    
     console.log(`\nPostgreSQL aggregation time: ${pgTime.toFixed(2)} seconds`);
     this.logResourceUsage('Aggregation', 'PostgreSQL', pgStartUsage);
     
-    // Generate visualization chart
-    await this.visualizer.generateAggregationChart(mongoTime, pgTime, this.concurrency);
+    // Generate visualization chart with real-time data points
+    await this.visualizer.generateAggregationChart(mongoTime, pgTime, this.concurrency, mongoDataPoints, pgDataPoints);
     console.log('Generated performance comparison chart for aggregation operations');
   }
 
@@ -291,19 +385,39 @@ class DatabaseBenchmark {
     } catch (error) {
       console.error('Error creating MongoDB text index:', error);
     }
+
+    // Data points for visualization
+    const mongoDataPoints: { time: number; operations: number }[] = [];
+    const pgDataPoints: { time: number; operations: number }[] = [];
+    const totalOperations = this.concurrency; // One search per client
     
     // MongoDB test - simple text search
     console.log(`\nPerforming MongoDB text search for term: "${searchTerm}"`);
     const mongoStartTime = performance.now();
     const mongoStartUsage = this.getResourceUsage();
-    await Promise.all(this.mongoDbs.map(db => {
+    // Add starting point
+    mongoDataPoints.push({ time: 0, operations: 0 });
+
+    // Track progress for MongoDB text searches
+    let mongoCompleted = 0;
+    const mongoPromises = this.mongoDbs.map(db => {
       const mongoCollection = db.collection('users');
-      return mongoCollection.find(
-        { $text: { $search: searchTerm } },
-        { projection: { score: { $meta: "textScore" } } }
-      ).sort({ score: { $meta: "textScore" } }).limit(20).toArray();
-    }));
+      return (async () => {
+        await mongoCollection.find(
+          { $text: { $search: searchTerm } },
+          { projection: { score: { $meta: "textScore" } } }
+        ).sort({ score: { $meta: "textScore" } }).limit(20).toArray();
+        mongoCompleted++;
+        const currentTime = (performance.now() - mongoStartTime) / 1000;
+        mongoDataPoints.push({ time: currentTime, operations: mongoCompleted });
+      })();
+    });
+
+    await Promise.all(mongoPromises);
     const mongoTime = (performance.now() - mongoStartTime) / 1000;
+    // Ensure we have the final point
+    mongoDataPoints.push({ time: mongoTime, operations: totalOperations });
+    
     const mongoResult = await this.mongoDbs[0].collection('users').find(
       { $text: { $search: searchTerm } },
       { projection: { score: { $meta: "textScore" } } }
@@ -315,10 +429,25 @@ class DatabaseBenchmark {
     console.log(`\nPerforming PostgreSQL text search for term: "${searchTerm}"`);
     const pgStartTime = performance.now();
     const pgStartUsage = this.getResourceUsage();
-    await Promise.all(this.pgClients.map(client => 
-      client.query(`SELECT id, data FROM users, jsonb_array_elements(data->'orders') as o, jsonb_array_elements(o->'items') as i WHERE i->>'product' ILIKE $1 LIMIT 20`, [`%${searchTerm}%`])
-    ));
+    // Add starting point
+    pgDataPoints.push({ time: 0, operations: 0 });
+
+    // Track progress for PostgreSQL text searches
+    let pgCompleted = 0;
+    const pgPromises = this.pgClients.map(client => 
+      (async () => {
+        await client.query(`SELECT id, data FROM users, jsonb_array_elements(data->'orders') as o, jsonb_array_elements(o->'items') as i WHERE i->>'product' ILIKE $1 LIMIT 20`, [`%${searchTerm}%`]);
+        pgCompleted++;
+        const currentTime = (performance.now() - pgStartTime) / 1000;
+        pgDataPoints.push({ time: currentTime, operations: pgCompleted });
+      })()
+    );
+
+    await Promise.all(pgPromises);
     const pgTime = (performance.now() - pgStartTime) / 1000;
+    // Ensure we have the final point
+    pgDataPoints.push({ time: pgTime, operations: totalOperations });
+    
     const pgResult = await this.pgClients[0].query(`SELECT id, data FROM users, jsonb_array_elements(data->'orders') as o, jsonb_array_elements(o->'items') as i WHERE i->>'product' ILIKE $1 LIMIT 20`, [`%${searchTerm}%`]);
     console.log(`PostgreSQL found ${pgResult.rowCount} results in ${pgTime.toFixed(2)} seconds`);
     this.logResourceUsage('Text Search', 'PostgreSQL', pgStartUsage);
@@ -349,8 +478,8 @@ class DatabaseBenchmark {
     console.log(`PostgreSQL similarity search found ${pgSimilarityResult.rowCount} results in ${pgSimilarityTime.toFixed(2)} seconds`);
     this.logResourceUsage('Similarity Search', 'PostgreSQL', pgSimilarityStartUsage);
     
-    // Generate visualization chart for text search
-    await this.visualizer.generateSearchChart(mongoTime, pgTime, this.concurrency, searchTerm);
+    // Generate visualization chart for text search with real-time data points
+    await this.visualizer.generateSearchChart(mongoTime, pgTime, this.concurrency, searchTerm, mongoDataPoints, pgDataPoints);
     console.log('Generated performance comparison chart for full-text search operations');
   }
   
@@ -429,5 +558,57 @@ program.command('full-text-search')
       await benchmark.close();
     }
   });
+
+  program.command('wipe-data')
+  .description('Wipe all data from MongoDB and PostgreSQL databases')
+  .action(async () => {
+    const benchmark = new DatabaseBenchmark(1); // Just need one connection
+    try {
+      await benchmark.connect();
+      console.log('Wiping all data from databases...');
+      
+      // Wipe MongoDB
+      const mongoDb = benchmark.mongoDbs[0];
+      await mongoDb.collection('users').deleteMany({});
+      console.log('MongoDB data wiped successfully');
+      
+      // Wipe PostgreSQL
+      await benchmark.pgClients[0].query('TRUNCATE TABLE users RESTART IDENTITY');
+      console.log('PostgreSQL data wiped successfully');
+    } catch (error) {
+      console.error('Error wiping data:', error);
+    } finally {
+      await benchmark.close();
+    }
+  });
+
+  program.command('check-empty')
+  .description('Check if MongoDB and PostgreSQL databases are empty')
+  .action(async () => {
+    const benchmark = new DatabaseBenchmark(1); // Just need one connection
+    try {
+      await benchmark.connect();
+      
+      // Check MongoDB
+      const mongoDb = benchmark.mongoDbs[0];
+      const mongoCount = await mongoDb.collection('users').countDocuments();
+      console.log(`MongoDB users collection has ${mongoCount} documents`);
+      
+      // Check PostgreSQL
+      const pgResult = await benchmark.pgClients[0].query('SELECT COUNT(*) FROM users');
+      const pgCount = parseInt(pgResult.rows[0].count);
+      console.log(`PostgreSQL users table has ${pgCount} rows`);
+      
+      if (mongoCount === 0 && pgCount === 0) {
+        console.log('Both databases are empty');
+      } else {
+        console.log('One or both databases contain data');
+      }
+    } catch (error) {
+      console.error('Error checking databases:', error);
+    } finally {
+      await benchmark.close();
+    }
+  })
 
 program.parse();

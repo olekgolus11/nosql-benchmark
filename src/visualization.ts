@@ -37,6 +37,15 @@ export class BenchmarkVisualizer {
    * Generate a line chart comparing MongoDB and PostgreSQL performance
    */
   async generateChart(data: VisualizationData): Promise<string> {
+    // Calculate performance metrics for subtitle
+    const mongoLastPoint = data.mongoData[data.mongoData.length - 1];
+    const pgLastPoint = data.pgData[data.pgData.length - 1];
+    const mongoOpsPerSec = mongoLastPoint ? (mongoLastPoint.operations / mongoLastPoint.time).toFixed(2) : 0;
+    const pgOpsPerSec = pgLastPoint ? (pgLastPoint.operations / pgLastPoint.time).toFixed(2) : 0;
+    
+    // Create subtitle with performance comparison
+    const subtitle = `MongoDB: ${mongoOpsPerSec} ops/sec | PostgreSQL: ${pgOpsPerSec} ops/sec`;
+    
     const configuration = {
       type: 'line',
       data: {
@@ -65,7 +74,7 @@ export class BenchmarkVisualizer {
         responsive: true,
         title: {
           display: true,
-          text: data.title,
+          text: [data.title, subtitle],
           fontSize: 16,
         },
         scales: {
@@ -98,6 +107,16 @@ export class BenchmarkVisualizer {
               padding: 20,
             },
           },
+          tooltip: {
+            callbacks: {
+              label: function(context: any) {
+                const label = context.dataset.label || '';
+                const value = context.parsed.y || 0;
+                const time = context.parsed.x || 0;
+                return `${label}: ${value} ops at ${time.toFixed(2)}s (${(value/time).toFixed(2)} ops/sec)`;
+              }
+            }
+          }
         },
       },
     };
@@ -111,10 +130,17 @@ export class BenchmarkVisualizer {
   /**
    * Generate a performance comparison chart for insert operations
    */
-  async generateInsertChart(mongoTime: number, pgTime: number, count: number, concurrency: number): Promise<string> {
-    // Create data points to simulate progress over time
-    const mongoData: DataPoint[] = this.generateProgressPoints(mongoTime, count);
-    const pgData: DataPoint[] = this.generateProgressPoints(pgTime, count);
+  async generateInsertChart(
+    mongoTime: number, 
+    pgTime: number, 
+    count: number, 
+    concurrency: number,
+    mongoDataPoints?: DataPoint[],
+    pgDataPoints?: DataPoint[]
+  ): Promise<string> {
+    // Use provided data points if available, otherwise generate simulated points
+    const mongoData: DataPoint[] = mongoDataPoints || this.generateProgressPoints(mongoTime, count);
+    const pgData: DataPoint[] = pgDataPoints || this.generateProgressPoints(pgTime, count);
 
     const outputPath = path.join(process.cwd(), 'outputs', `insert_${concurrency}_${count}.jpg`);
     const title = `Insert test, ${concurrency} concurrent clients, ${count} documents inserted`;
@@ -130,11 +156,17 @@ export class BenchmarkVisualizer {
   /**
    * Generate a performance comparison chart for complex query operations
    */
-  async generateQueryChart(mongoTime: number, pgTime: number, concurrency: number): Promise<string> {
+  async generateQueryChart(
+    mongoTime: number, 
+    pgTime: number, 
+    concurrency: number,
+    mongoDataPoints?: DataPoint[],
+    pgDataPoints?: DataPoint[]
+  ): Promise<string> {
     // For queries, we'll use a fixed number of operations (1 per client)
     const operations = concurrency;
-    const mongoData: DataPoint[] = this.generateProgressPoints(mongoTime, operations);
-    const pgData: DataPoint[] = this.generateProgressPoints(pgTime, operations);
+    const mongoData: DataPoint[] = mongoDataPoints || this.generateProgressPoints(mongoTime, operations);
+    const pgData: DataPoint[] = pgDataPoints || this.generateProgressPoints(pgTime, operations);
 
     const outputPath = path.join(process.cwd(), 'outputs', `query_${concurrency}.jpg`);
     const title = `Complex query test, ${concurrency} concurrent clients`;
@@ -150,11 +182,17 @@ export class BenchmarkVisualizer {
   /**
    * Generate a performance comparison chart for aggregation operations
    */
-  async generateAggregationChart(mongoTime: number, pgTime: number, concurrency: number): Promise<string> {
+  async generateAggregationChart(
+    mongoTime: number, 
+    pgTime: number, 
+    concurrency: number,
+    mongoDataPoints?: DataPoint[],
+    pgDataPoints?: DataPoint[]
+  ): Promise<string> {
     // For aggregations, we'll use a fixed number of operations (1 per client)
     const operations = concurrency;
-    const mongoData: DataPoint[] = this.generateProgressPoints(mongoTime, operations);
-    const pgData: DataPoint[] = this.generateProgressPoints(pgTime, operations);
+    const mongoData: DataPoint[] = mongoDataPoints || this.generateProgressPoints(mongoTime, operations);
+    const pgData: DataPoint[] = pgDataPoints || this.generateProgressPoints(pgTime, operations);
 
     const outputPath = path.join(process.cwd(), 'outputs', `aggregation_${concurrency}.jpg`);
     const title = `Aggregation test, ${concurrency} concurrent clients`;
@@ -170,11 +208,18 @@ export class BenchmarkVisualizer {
   /**
    * Generate a performance comparison chart for full-text search operations
    */
-  async generateSearchChart(mongoTime: number, pgTime: number, concurrency: number, searchTerm: string): Promise<string> {
+  async generateSearchChart(
+    mongoTime: number, 
+    pgTime: number, 
+    concurrency: number, 
+    searchTerm: string,
+    mongoDataPoints?: DataPoint[],
+    pgDataPoints?: DataPoint[]
+  ): Promise<string> {
     // For text search, we'll use a fixed number of operations (1 per client)
     const operations = concurrency;
-    const mongoData: DataPoint[] = this.generateProgressPoints(mongoTime, operations);
-    const pgData: DataPoint[] = this.generateProgressPoints(pgTime, operations);
+    const mongoData: DataPoint[] = mongoDataPoints || this.generateProgressPoints(mongoTime, operations);
+    const pgData: DataPoint[] = pgDataPoints || this.generateProgressPoints(pgTime, operations);
 
     const outputPath = path.join(process.cwd(), 'outputs', `search_${concurrency}_${searchTerm}.jpg`);
     const title = `Full-text search test, ${concurrency} concurrent clients, term: "${searchTerm}"`;
