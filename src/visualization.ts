@@ -205,23 +205,87 @@ export class BenchmarkVisualizer {
     });
   }
 
+
+  /**
+   * Generate a summary chart for multiple search terms
+   */
+  async generateSearchSummaryChart(avgMongoTime: number, avgPgTime: number, concurrency: number, searchCount: number, searchTerms: string[]): Promise<string> {
+    const title = `Full-Text Search Performance Summary (${searchCount} terms)`;
+    const subtitle = `MongoDB vs PostgreSQL | ${concurrency} concurrent clients`;
+    
+    // Create a bar chart comparing average performance
+    const configuration = {
+      type: 'bar',
+      data: {
+        labels: ['MongoDB', 'PostgreSQL'],
+        datasets: [{
+          label: `Average search time (${searchCount} terms)`,
+          data: [avgMongoTime, avgPgTime],
+          backgroundColor: ['rgba(0, 128, 0, 0.6)', 'rgba(0, 0, 255, 0.6)'],
+          borderColor: ['green', 'blue'],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        title: {
+          display: true,
+          text: [title, subtitle, `Search terms: ${searchTerms.join(', ')}`],
+          fontSize: 16,
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Time (seconds)'
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top'
+          },
+          datalabels: {
+            anchor: 'end',
+            align: 'top',
+            formatter: (value: number) => value.toFixed(2) + 's',
+            font: {
+              weight: 'bold'
+            }
+          }
+        }
+      }
+    };
+
+    const outputPath = path.join(process.cwd(), 'outputs', 'search_summary.png');
+    const buffer = await this.chartJSNodeCanvas.renderToBuffer(configuration as any);
+    fs.writeFileSync(outputPath, buffer);
+    console.log(`Chart saved to ${outputPath}`);
+    
+    return outputPath;
+  }
+
   /**
    * Generate a performance comparison chart for full-text search operations
    */
   async generateSearchChart(
-    mongoTime: number, 
-    pgTime: number, 
-    concurrency: number, 
+    mongoTime: number,
+    pgTime: number,
+    concurrency: number,
     searchTerm: string,
-    mongoDataPoints?: DataPoint[],
-    pgDataPoints?: DataPoint[]
+    mongoDataPoints: DataPoint[],
+    pgDataPoints: DataPoint[],
+    filenameSuffix?: string
   ): Promise<string> {
     // For text search, we'll use a fixed number of operations (1 per client)
     const operations = concurrency;
     const mongoData: DataPoint[] = mongoDataPoints || this.generateProgressPoints(mongoTime, operations);
     const pgData: DataPoint[] = pgDataPoints || this.generateProgressPoints(pgTime, operations);
 
-    const outputPath = path.join(process.cwd(), 'outputs', `search_${concurrency}_${searchTerm}.jpg`);
+    const filename = filenameSuffix ? `search_performance_${filenameSuffix}.png` : `search_${concurrency}_${searchTerm}.jpg`;
+    const outputPath = path.join(process.cwd(), 'outputs', filename);
     const title = `Full-text search test, ${concurrency} concurrent clients, term: "${searchTerm}"`;
 
     return this.generateChart({

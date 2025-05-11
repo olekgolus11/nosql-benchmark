@@ -369,14 +369,13 @@ class DatabaseBenchmark {
     console.log('Generated performance comparison chart for aggregation operations');
   }
 
-  async fullTextSearch(concurrency: number = 25): Promise<void> {
+  async fullTextSearch(concurrency: number = 25, searchCount: number = 1): Promise<void> {
     // Ensure we're using the correct number of clients
     if (concurrency !== this.concurrency) {
       console.warn(`Warning: Requested concurrency (${concurrency}) differs from initialized client count (${this.concurrency}). Using ${this.concurrency} clients.`);
     }
     
-    console.log('Running full-text search benchmark...');
-    const searchTerm = faker.word.sample();
+    console.log(`Running full-text search benchmark with ${searchCount} search terms...`);
     
     // Create index using the first MongoDB client
     try {
@@ -386,100 +385,155 @@ class DatabaseBenchmark {
       console.error('Error creating MongoDB text index:', error);
     }
 
-    // Data points for visualization
-    const mongoDataPoints: { time: number; operations: number }[] = [];
-    const pgDataPoints: { time: number; operations: number }[] = [];
-    const totalOperations = this.concurrency; // One search per client
+    // Aggregate results across all search terms
+    let totalMongoTime = 0;
+    let totalPgTime = 0;
+    const allSearchTerms: string[] = [];
     
-    // MongoDB test - simple text search
-    console.log(`\nPerforming MongoDB text search for term: "${searchTerm}"`);
-    const mongoStartTime = performance.now();
-    const mongoStartUsage = this.getResourceUsage();
-    // Add starting point
-    mongoDataPoints.push({ time: 0, operations: 0 });
+    // Run multiple searches based on searchCount
+    for (let i = 0; i < searchCount; i++) {
+      const searchTerm = faker.word.sample();
+      allSearchTerms.push(searchTerm);
+      console.log(`\nSearch #${i+1} of ${searchCount} - Term: "${searchTerm}"`);
+      
+      // Data points for visualization
+      const mongoDataPoints: { time: number; operations: number }[] = [];
+      const pgDataPoints: { time: number; operations: number }[] = [];
+      const totalOperations = this.concurrency; // One search per client
+      
+      // MongoDB test - simple text search
+      console.log(`Performing MongoDB text search for term: "${searchTerm}"`);
+      const mongoStartTime = performance.now();
+      const mongoStartUsage = this.getResourceUsage();
+      // Add starting point
+      mongoDataPoints.push({ time: 0, operations: 0 });
 
-    // Track progress for MongoDB text searches
-    let mongoCompleted = 0;
-    const mongoPromises = this.mongoDbs.map(db => {
-      const mongoCollection = db.collection('users');
-      return (async () => {
-        await mongoCollection.find(
-          { $text: { $search: searchTerm } },
-          { projection: { score: { $meta: "textScore" } } }
-        ).sort({ score: { $meta: "textScore" } }).limit(20).toArray();
-        mongoCompleted++;
-        const currentTime = (performance.now() - mongoStartTime) / 1000;
-        mongoDataPoints.push({ time: currentTime, operations: mongoCompleted });
-      })();
-    });
+      // Track progress for MongoDB text searches
+      let mongoCompleted = 0;
+      const mongoPromises = this.mongoDbs.map(db => {
+        const mongoCollection = db.collection('users');
+        return (async () => {
+          await mongoCollection.find(
+            { $text: { $search: searchTerm } },
+            { projection: { score: { $meta: "textScore" } } }
+          ).sort({ score: { $meta: "textScore" } }).limit(20).toArray();
+          mongoCompleted++;
+          const currentTime = (performance.now() - mongoStartTime) / 1000;
+          mongoDataPoints.push({ time: currentTime, operations: mongoCompleted });
+        })();
+      });
 
-    await Promise.all(mongoPromises);
-    const mongoTime = (performance.now() - mongoStartTime) / 1000;
-    // Ensure we have the final point
-    mongoDataPoints.push({ time: mongoTime, operations: totalOperations });
-    
-    const mongoResult = await this.mongoDbs[0].collection('users').find(
-      { $text: { $search: searchTerm } },
-      { projection: { score: { $meta: "textScore" } } }
-    ).sort({ score: { $meta: "textScore" } }).limit(20).toArray();
-    console.log(`MongoDB found ${mongoResult.length} results in ${mongoTime.toFixed(2)} seconds`);
-    this.logResourceUsage('Text Search', 'MongoDB', mongoStartUsage);
-    
-    // PostgreSQL test - full-text search
-    console.log(`\nPerforming PostgreSQL text search for term: "${searchTerm}"`);
-    const pgStartTime = performance.now();
-    const pgStartUsage = this.getResourceUsage();
-    // Add starting point
-    pgDataPoints.push({ time: 0, operations: 0 });
+      await Promise.all(mongoPromises);
+      const mongoTime = (performance.now() - mongoStartTime) / 1000;
+      totalMongoTime += mongoTime;
+      // Ensure we have the final point
+      mongoDataPoints.push({ time: mongoTime, operations: totalOperations });
+      
+      const mongoResult = await this.mongoDbs[0].collection('users').find(
+        { $text: { $search: searchTerm } },
+        { projection: { score: { $meta: "textScore" } } }
+      ).sort({ score: { $meta: "textScore" } }).limit(20).toArray();
+      console.log(`MongoDB found ${mongoResult.length} results in ${mongoTime.toFixed(2)} seconds`);
+      this.logResourceUsage('Text Search', 'MongoDB', mongoStartUsage);
+      
+      // PostgreSQL test - full-text search
+      console.log(`Performing PostgreSQL text search for term: "${searchTerm}"`);
+      const pgStartTime = performance.now();
+      const pgStartUsage = this.getResourceUsage();
+      // Add starting point
+      pgDataPoints.push({ time: 0, operations: 0 });
 
-    // Track progress for PostgreSQL text searches
-    let pgCompleted = 0;
-    const pgPromises = this.pgClients.map(client => 
-      (async () => {
-        await client.query(`SELECT id, data FROM users, jsonb_array_elements(data->'orders') as o, jsonb_array_elements(o->'items') as i WHERE i->>'product' ILIKE $1 LIMIT 20`, [`%${searchTerm}%`]);
-        pgCompleted++;
-        const currentTime = (performance.now() - pgStartTime) / 1000;
-        pgDataPoints.push({ time: currentTime, operations: pgCompleted });
-      })()
-    );
+      // Track progress for PostgreSQL text searches
+      let pgCompleted = 0;
+      const pgPromises = this.pgClients.map(client => 
+        (async () => {
+          await client.query(`SELECT id, data FROM users, jsonb_array_elements(data->'orders') as o, jsonb_array_elements(o->'items') as i WHERE i->>'product' ILIKE $1 LIMIT 20`, [`%${searchTerm}%`]);
+          pgCompleted++;
+          const currentTime = (performance.now() - pgStartTime) / 1000;
+          pgDataPoints.push({ time: currentTime, operations: pgCompleted });
+        })()
+      );
 
-    await Promise.all(pgPromises);
-    const pgTime = (performance.now() - pgStartTime) / 1000;
-    // Ensure we have the final point
-    pgDataPoints.push({ time: pgTime, operations: totalOperations });
+      await Promise.all(pgPromises);
+      const pgTime = (performance.now() - pgStartTime) / 1000;
+      totalPgTime += pgTime;
+      // Ensure we have the final point
+      pgDataPoints.push({ time: pgTime, operations: totalOperations });
+      
+      const pgResult = await this.pgClients[0].query(`SELECT id, data FROM users, jsonb_array_elements(data->'orders') as o, jsonb_array_elements(o->'items') as i WHERE i->>'product' ILIKE $1 LIMIT 20`, [`%${searchTerm}%`]);
+      console.log(`PostgreSQL found ${pgResult.rowCount} results in ${pgTime.toFixed(2)} seconds`);
+      this.logResourceUsage('Text Search', 'PostgreSQL', pgStartUsage);
+      
+      // Generate visualization chart for this search term
+      if (searchCount > 1) {
+        await this.visualizer.generateSearchChart(
+          mongoTime, 
+          pgTime, 
+          this.concurrency, 
+          searchTerm, 
+          mongoDataPoints, 
+          pgDataPoints,
+          `search_${i+1}_of_${searchCount}`
+        );
+      }
+      
+      // More complex search patterns (only for the first search term if multiple)
+      if (i === 0) {
+        console.log('\nRunning complex pattern search...');
+        
+        // MongoDB regex search
+        const mongoRegexStartTime = performance.now();
+        const mongoRegexStartUsage = this.getResourceUsage();
+        await Promise.all(this.mongoDbs.map(db => {
+          const mongoCollection = db.collection('users');
+          return mongoCollection.find({ 'orders.items.product': { $regex: new RegExp(searchTerm, 'i') } }).limit(20).toArray();
+        }));
+        const mongoRegexTime = (performance.now() - mongoRegexStartTime) / 1000;
+        const mongoRegexResult = await this.mongoDbs[0].collection('users').find({ 'orders.items.product': { $regex: new RegExp(searchTerm, 'i') } }).limit(20).toArray();
+        console.log(`MongoDB regex search found ${mongoRegexResult.length} results in ${mongoRegexTime.toFixed(2)} seconds`);
+        this.logResourceUsage('Regex Search', 'MongoDB', mongoRegexStartUsage);
+        
+        // PostgreSQL trigram similarity search
+        const pgSimilarityStartTime = performance.now();
+        const pgSimilarityStartUsage = this.getResourceUsage();
+        await Promise.all(this.pgClients.map(client => 
+          client.query(`SELECT id, data, similarity(i->>'product', $1) as sim_score FROM users, jsonb_array_elements(data->'orders') as o, jsonb_array_elements(o->'items') as i WHERE similarity(i->>'product', $1) > 0.3 ORDER BY sim_score DESC LIMIT 20`, [searchTerm])
+        ));
+        const pgSimilarityTime = (performance.now() - pgSimilarityStartTime) / 1000;
+        const pgSimilarityResult = await this.pgClients[0].query(`SELECT id, data, similarity(i->>'product', $1) as sim_score FROM users, jsonb_array_elements(data->'orders') as o, jsonb_array_elements(o->'items') as i WHERE similarity(i->>'product', $1) > 0.3 ORDER BY sim_score DESC LIMIT 20`, [searchTerm]);
+        console.log(`PostgreSQL similarity search found ${pgSimilarityResult.rowCount} results in ${pgSimilarityTime.toFixed(2)} seconds`);
+        this.logResourceUsage('Similarity Search', 'PostgreSQL', pgSimilarityStartUsage);
+      }
+    }
     
-    const pgResult = await this.pgClients[0].query(`SELECT id, data FROM users, jsonb_array_elements(data->'orders') as o, jsonb_array_elements(o->'items') as i WHERE i->>'product' ILIKE $1 LIMIT 20`, [`%${searchTerm}%`]);
-    console.log(`PostgreSQL found ${pgResult.rowCount} results in ${pgTime.toFixed(2)} seconds`);
-    this.logResourceUsage('Text Search', 'PostgreSQL', pgStartUsage);
+    // Generate summary visualization if multiple search terms were used
+    if (searchCount > 1) {
+      const avgMongoTime = totalMongoTime / searchCount;
+      const avgPgTime = totalPgTime / searchCount;
+      console.log(`\nSummary: Ran ${searchCount} search terms`);
+      console.log(`Average MongoDB search time: ${avgMongoTime.toFixed(2)} seconds`);
+      console.log(`Average PostgreSQL search time: ${avgPgTime.toFixed(2)} seconds`);
+      
+      // Generate a summary chart
+      await this.visualizer.generateSearchSummaryChart(
+        avgMongoTime,
+        avgPgTime,
+        this.concurrency,
+        searchCount,
+        allSearchTerms
+      );
+    } else {
+      // For a single search, use the original chart
+      await this.visualizer.generateSearchChart(
+        totalMongoTime, 
+        totalPgTime, 
+        this.concurrency, 
+        allSearchTerms[0], 
+        [], // We don't have aggregated data points for a single search
+        []
+      );
+    }
     
-    // More complex search patterns
-    console.log('\nRunning complex pattern search...');
-    
-    // MongoDB regex search
-    const mongoRegexStartTime = performance.now();
-    const mongoRegexStartUsage = this.getResourceUsage();
-    await Promise.all(this.mongoDbs.map(db => {
-      const mongoCollection = db.collection('users');
-      return mongoCollection.find({ 'orders.items.product': { $regex: new RegExp(searchTerm, 'i') } }).limit(20).toArray();
-    }));
-    const mongoRegexTime = (performance.now() - mongoRegexStartTime) / 1000;
-    const mongoRegexResult = await this.mongoDbs[0].collection('users').find({ 'orders.items.product': { $regex: new RegExp(searchTerm, 'i') } }).limit(20).toArray();
-    console.log(`MongoDB regex search found ${mongoRegexResult.length} results in ${mongoRegexTime.toFixed(2)} seconds`);
-    this.logResourceUsage('Regex Search', 'MongoDB', mongoRegexStartUsage);
-    
-    // PostgreSQL trigram similarity search
-    const pgSimilarityStartTime = performance.now();
-    const pgSimilarityStartUsage = this.getResourceUsage();
-    await Promise.all(this.pgClients.map(client => 
-      client.query(`SELECT id, data, similarity(i->>'product', $1) as sim_score FROM users, jsonb_array_elements(data->'orders') as o, jsonb_array_elements(o->'items') as i WHERE similarity(i->>'product', $1) > 0.3 ORDER BY sim_score DESC LIMIT 20`, [searchTerm])
-    ));
-    const pgSimilarityTime = (performance.now() - pgSimilarityStartTime) / 1000;
-    const pgSimilarityResult = await this.pgClients[0].query(`SELECT id, data, similarity(i->>'product', $1) as sim_score FROM users, jsonb_array_elements(data->'orders') as o, jsonb_array_elements(o->'items') as i WHERE similarity(i->>'product', $1) > 0.3 ORDER BY sim_score DESC LIMIT 20`, [searchTerm]);
-    console.log(`PostgreSQL similarity search found ${pgSimilarityResult.rowCount} results in ${pgSimilarityTime.toFixed(2)} seconds`);
-    this.logResourceUsage('Similarity Search', 'PostgreSQL', pgSimilarityStartUsage);
-    
-    // Generate visualization chart for text search with real-time data points
-    await this.visualizer.generateSearchChart(mongoTime, pgTime, this.concurrency, searchTerm, mongoDataPoints, pgDataPoints);
     console.log('Generated performance comparison chart for full-text search operations');
   }
   
@@ -545,15 +599,17 @@ program.command('aggregation')
   });
 
 program.command('full-text-search')
-  .description('Run full-text search performance test')
-  .option('--concurrency <number>', 'Number of concurrent clients', '25')
+  .description('Run full-text search benchmark')
+  .option('-c, --concurrency <number>', 'Number of concurrent clients', '25')
+  .option('-n, --count <number>', 'Number of search terms to test', '1')
   .action(async (options) => {
     const concurrency = parseInt(options.concurrency);
+    const searchCount = parseInt(options.count);
     const benchmark = new DatabaseBenchmark(concurrency);
     try {
       await benchmark.connect();
       await benchmark.setupPostgres(); // Ensure indexes are created
-      await benchmark.fullTextSearch(concurrency);
+      await benchmark.fullTextSearch(concurrency, searchCount);
     } finally {
       await benchmark.close();
     }

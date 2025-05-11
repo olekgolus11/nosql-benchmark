@@ -57,8 +57,16 @@ bun run src/benchmark.ts aggregation
 ### Full-Text Search Test
 Test full-text search capabilities and performance:
 ```bash
+# Basic usage
 bun run src/benchmark.ts full-text-search
+
+# With custom concurrency and multiple search terms
+bun run src/benchmark.ts full-text-search -c 10 -n 5
 ```
+
+Options:
+- `-c, --concurrency <number>`: Number of concurrent clients (default: 25)
+- `-n, --count <number>`: Number of search terms to test (default: 1)
 
 ## Development
 
