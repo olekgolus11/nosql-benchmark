@@ -1,18 +1,7 @@
 import { ChartJSNodeCanvas } from 'chartjs-node-canvas';
 import fs from 'fs';
 import path from 'path';
-
-interface DataPoint {
-  time: number; // Time in seconds
-  operations: number; // Cumulative operations completed
-}
-
-interface VisualizationData {
-  mongoData: DataPoint[];
-  pgData: DataPoint[];
-  title: string;
-  outputPath: string;
-}
+import { DataPoint, VisualizationData } from './interfaces';
 
 export class BenchmarkVisualizer {
   private width = 800;

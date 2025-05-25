@@ -5,6 +5,15 @@ import pg from 'pg';
 import { faker } from '@faker-js/faker';
 import os from 'os';
 import { BenchmarkVisualizer } from './visualization';
+import { 
+  UserData, 
+  InsertTestResult, 
+  ComplexQueryResult, 
+  AggregationResult, 
+  FullTextSearchResult,
+  ResourceUsage,
+  DataPoint
+} from './interfaces';
 
 // Load environment variables
 config();
@@ -13,26 +22,7 @@ config();
 const MONGO_URI = 'mongodb://root:example@localhost:27017/';
 const PG_CONNECTION = 'postgresql://root:example@localhost:5432/benchmark';
 
-interface UserData {
-  name: string;
-  email: string;
-  preferences: {
-    notifications: {
-      email: boolean;
-      push: boolean;
-    };
-  };
-  orders: Array<{
-    amount: number;
-    date: string;
-    items: Array<{
-      product: string;
-      quantity: number;
-    }>;
-  }>;
-}
-
-class DatabaseBenchmark {
+export class DatabaseBenchmark {
   public mongoClients: MongoClient[] = [];
   public mongoDbs: Db[] = [];
   public pgClients: pg.Client[] = [];
@@ -128,7 +118,7 @@ class DatabaseBenchmark {
     console.log(`System Memory Usage: ${endUsage.memory.memoryUsagePercent}%`);
   }
 
-  async insertTest(count: number, concurrency: number = 25): Promise<void> {
+  async insertTest(count: number, concurrency: number = 25): Promise<InsertTestResult> {
     // Ensure we're using the correct number of clients
     if (concurrency !== this.concurrency) {
       console.warn(`Warning: Requested concurrency (${concurrency}) differs from initialized client count (${this.concurrency}). Using ${this.concurrency} clients.`);
@@ -219,10 +209,21 @@ class DatabaseBenchmark {
     
     // Generate visualization chart with real-time data points
     await this.visualizer.generateInsertChart(mongoTime, pgTime, count, this.concurrency, mongoDataPoints, pgDataPoints);
-    console.log('Generated performance comparison chart for insert operations');
+    
+    // Return the results
+    return {
+      mongoTime,
+      pgTime,
+      mongoOpsPerSecond: count / mongoTime,
+      pgOpsPerSecond: count / pgTime,
+      count,
+      concurrency: this.concurrency,
+      mongoDataPoints,
+      pgDataPoints
+    };
   }
 
-  async complexQuery(concurrency: number = 25): Promise<void> {
+  async complexQuery(concurrency: number = 25): Promise<ComplexQueryResult> {
     // Ensure we're using the correct number of clients
     if (concurrency !== this.concurrency) {
       console.warn(`Warning: Requested concurrency (${concurrency}) differs from initialized client count (${this.concurrency}). Using ${this.concurrency} clients.`);
@@ -294,10 +295,20 @@ class DatabaseBenchmark {
     
     // Generate visualization chart with real-time data points
     await this.visualizer.generateQueryChart(mongoTime, pgTime, this.concurrency, mongoDataPoints, pgDataPoints);
-    console.log('Generated performance comparison chart for complex query operations');
+    
+    // Return the results
+    return {
+      mongoTime,
+      pgTime,
+      mongoOpsPerSecond: this.concurrency / mongoTime,
+      pgOpsPerSecond: this.concurrency / pgTime,
+      concurrency: this.concurrency,
+      mongoDataPoints,
+      pgDataPoints
+    };
   }
 
-  async aggregation(concurrency: number = 25): Promise<void> {
+  async aggregation(concurrency: number = 25): Promise<AggregationResult> {
     // Ensure we're using the correct number of clients
     if (concurrency !== this.concurrency) {
       console.warn(`Warning: Requested concurrency (${concurrency}) differs from initialized client count (${this.concurrency}). Using ${this.concurrency} clients.`);
@@ -366,10 +377,20 @@ class DatabaseBenchmark {
     
     // Generate visualization chart with real-time data points
     await this.visualizer.generateAggregationChart(mongoTime, pgTime, this.concurrency, mongoDataPoints, pgDataPoints);
-    console.log('Generated performance comparison chart for aggregation operations');
+    
+    // Return the results
+    return {
+      mongoTime,
+      pgTime,
+      mongoOpsPerSecond: this.concurrency / mongoTime,
+      pgOpsPerSecond: this.concurrency / pgTime,
+      concurrency: this.concurrency,
+      mongoDataPoints,
+      pgDataPoints
+    };
   }
 
-  async fullTextSearch(concurrency: number = 25, searchCount: number = 1): Promise<void> {
+  async fullTextSearch(concurrency: number = 25, searchCount: number = 1): Promise<FullTextSearchResult> {
     // Ensure we're using the correct number of clients
     if (concurrency !== this.concurrency) {
       console.warn(`Warning: Requested concurrency (${concurrency}) differs from initialized client count (${this.concurrency}). Using ${this.concurrency} clients.`);
@@ -529,7 +550,18 @@ class DatabaseBenchmark {
       );
     }
     
-    console.log('Generated performance comparison chart for full-text search operations');
+    // Return the results
+    return {
+      mongoTime: totalMongoTime / searchCount, // Average time per search
+      pgTime: totalPgTime / searchCount,       // Average time per search
+      mongoOpsPerSecond: (this.concurrency * searchCount) / totalMongoTime,
+      pgOpsPerSecond: (this.concurrency * searchCount) / totalPgTime,
+      concurrency: this.concurrency,
+      searchCount,
+      searchTerms: allSearchTerms,
+      mongoDataPoints: [], // We don't collect these for the summary
+      pgDataPoints: []     // We don't collect these for the summary
+    };
   }
   
   async close(): Promise<void> {

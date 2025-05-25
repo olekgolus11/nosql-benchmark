@@ -6,7 +6,13 @@
   "scripts": {
     "start": "bun run src/benchmark.ts",
     "dev": "bun --watch src/benchmark.ts",
-    "build": "bun build src/benchmark.ts --outdir dist"
+    "build": "bun build src/benchmark.ts --outdir dist",
+    "comprehensive-benchmark": "bun run src/run-comprehensive-benchmark.ts",
+    "comprehensive-benchmark:all": "bun run src/run-comprehensive-benchmark.ts run-all",
+    "comprehensive-benchmark:insert": "bun run src/run-comprehensive-benchmark.ts insert-tests",
+    "comprehensive-benchmark:query": "bun run src/run-comprehensive-benchmark.ts query-tests",
+    "comprehensive-benchmark:aggregation": "bun run src/run-comprehensive-benchmark.ts aggregation-tests",
+    "comprehensive-benchmark:search": "bun run src/run-comprehensive-benchmark.ts search-tests"
   },
   "dependencies": {
     "@faker-js/faker": "^8.3.1",
