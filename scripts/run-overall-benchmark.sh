@@ -3,18 +3,19 @@
 # Comprehensive Benchmark Runner
 
 # --- Configuration ---
-MONGO_CONTAINER_NAME="nosql-benchmark-mongodb-1"
-POSTGRES_CONTAINER_NAME="nosql-benchmark-postgres-1"
+# MONGO_CONTAINER_NAME="nosql-benchmark-mongodb-1" # No longer needed for direct docker exec
+# POSTGRES_CONTAINER_NAME="nosql-benchmark-postgres-1" # No longer needed
 
-MONGO_DB_NAME="benchmark"
-POSTGRES_DB_NAME="benchmark"
-POSTGRES_USER="root"
-POSTGRES_PASSWORD="example"
-MONGO_USER="root"
-MONGO_PASSWORD="example"
+# MONGO_DB_NAME="benchmark" # Handled by benchmark.ts
+# POSTGRES_DB_NAME="benchmark" # Handled by benchmark.ts
+# POSTGRES_USER="root" # Handled by benchmark.ts
+# POSTGRES_PASSWORD="example" # Handled by benchmark.ts
+# MONGO_USER="root" # Handled by benchmark.ts
+# MONGO_PASSWORD="example" # Handled by benchmark.ts
 
 PROJECT_ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && cd .. && pwd)" # Get project root
 BASE_OUTPUT_DIR="${PROJECT_ROOT_DIR}/benchmark_results"
+CHART_SOURCE_DIR="${PROJECT_ROOT_DIR}/outputs" # Directory where benchmark.ts saves charts
 
 # --- Helper Functions ---
 
@@ -22,27 +23,15 @@ log() {
   echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1"
 }
 
-# Function to clear MongoDB
-clear_mongodb() {
-  log "Clearing MongoDB (database: $MONGO_DB_NAME)..."
-  docker exec -i "$MONGO_CONTAINER_NAME" mongo -u "$MONGO_USER" -p "$MONGO_PASSWORD" --authenticationDatabase admin "$MONGO_DB_NAME" --eval "db.dropDatabase()" > /dev/null 2>&1
-  if [ $? -eq 0 ]; then
-    log "MongoDB cleared successfully."
+# Function to clear databases using benchmark.ts wipe-data command
+clear_databases() {
+  log "Clearing databases using 'bun run src/benchmark.ts wipe-data'..."
+  if bun run src/benchmark.ts wipe-data; then
+    log "Databases cleared successfully via wipe-data command."
   else
-    log "ERROR: Failed to clear MongoDB."
+    log "ERROR: Failed to clear databases using wipe-data command. Check output above."
     # Optionally exit here or handle error
-  fi
-}
-
-# Function to clear PostgreSQL
-clear_postgres() {
-  log "Clearing PostgreSQL (database: $POSTGRES_DB_NAME)..."
-  PGPASSWORD="$POSTGRES_PASSWORD" docker exec -i "$POSTGRES_CONTAINER_NAME" psql -U "$POSTGRES_USER" -d "$POSTGRES_DB_NAME" -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;" > /dev/null 2>&1
-  if [ $? -eq 0 ]; then
-    log "PostgreSQL cleared successfully."
-  else
-    log "ERROR: Failed to clear PostgreSQL."
-    # Optionally exit here or handle error
+    exit 1 # Exit if clearing fails, as it impacts subsequent tests
   fi
 }
 
@@ -90,34 +79,30 @@ for scenario in "${TEST_SCENARIOS[@]}"; do
   log "Created scenario output directory: ${SCENARIO_OUTPUT_DIR}"
 
   if [ "$CLEAR_DB" == "true" ]; then
-    clear_mongodb
-    clear_postgres
+    clear_databases # Use the new function
   else
     log "Skipping database clearing for this scenario."
   fi
 
   log "Executing benchmark: bun run src/benchmark.ts ${COMMAND} ${OPTIONS}"
   
+  # Ensure the chart source directory exists before running the benchmark
+  mkdir -p "${CHART_SOURCE_DIR}"
+
   # Execute and capture output
-  # Assuming benchmark.ts prints JSON to stdout and saves charts to CWD
   if bun run src/benchmark.ts ${COMMAND} ${OPTIONS} > "${SCENARIO_OUTPUT_DIR}/results.json" 2> "${SCENARIO_OUTPUT_DIR}/error.log"; then
     log "Benchmark completed successfully for ${SCENARIO_NAME}."
   else
     log "ERROR: Benchmark failed for ${SCENARIO_NAME}. Check error.log."
   fi
   
-  # Capture all stdout/stderr to a general log as well for easier debugging
-  # This is redundant if results.json captures all primary output, but good for full trace
-  # bun run src/benchmark.ts ${COMMAND} ${OPTIONS} > "${SCENARIO_OUTPUT_DIR}/output.log" 2>&1
-
-  log "Moving any generated charts (e.g., *.png) to scenario directory..."
-  # Move any .png files from project root to scenario directory
-  # Adjust if charts are saved elsewhere by benchmark.ts
-  find . -maxdepth 1 -name '*.png' -exec mv {} "${SCENARIO_OUTPUT_DIR}/" \;
-  if ls "${SCENARIO_OUTPUT_DIR}"/*.png > /dev/null 2>&1; then
+  log "Moving any generated charts (e.g., *.jpg, *.png) from ${CHART_SOURCE_DIR} to scenario directory..."
+  # Move any .jpg or .png files from CHART_SOURCE_DIR to scenario directory
+  find "${CHART_SOURCE_DIR}" -maxdepth 1 \( -name '*.jpg' -o -name '*.png' \) -exec mv {} "${SCENARIO_OUTPUT_DIR}/" \;
+  if ls "${SCENARIO_OUTPUT_DIR}"/*.jpg > /dev/null 2>&1 || ls "${SCENARIO_OUTPUT_DIR}"/*.png > /dev/null 2>&1; then
     log "Charts moved."
   else
-    log "No charts found to move or error moving charts."
+    log "No charts found to move from ${CHART_SOURCE_DIR} or error moving charts."
   fi
   
   log "Scenario ${SCENARIO_NAME} finished."

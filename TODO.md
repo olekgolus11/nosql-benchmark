@@ -15,12 +15,12 @@
 ## Phase 2: Implementation
 
 - [X] Create a directory for storing test outputs (e.g., `benchmark_results`).
-- [P] Implement a script/command to clear the database (MongoDB and PostgreSQL). (Initial functions created in `run-overall-benchmark.sh`)
-- [P] Implement the overall benchmark runner (`scripts/run-overall-benchmark.sh`):
-    - [P] Script to iterate through test configurations. (Initial structure and scenarios defined)
-    - [P] Logic to execute individual benchmark commands with specified parameters. (Basic execution in place)
-    - [P] Logic to capture and save outputs in the defined formats (visual and JSON). (JSON and log capture, basic chart moving)
-- [ ] Create example test configurations within the runner. (Initial set created, can be expanded)
+- [X] Implement a script/command to clear the database (MongoDB and PostgreSQL). (Switched to using `wipe-data` from `benchmark.ts`)
+- [X] Implement the overall benchmark runner (`scripts/run-overall-benchmark.sh`):
+    - [X] Script to iterate through test configurations. (Structure and scenarios defined)
+    - [X] Logic to execute individual benchmark commands with specified parameters. (Execution in place)
+    - [X] Logic to capture and save outputs in the defined formats (visual and JSON). (JSON, log capture, and chart moving implemented)
+- [P] Create example test configurations within the runner. (Initial set created, can be expanded by user)
 
 ## Phase 3: Testing and Refinement
 

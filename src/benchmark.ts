@@ -562,6 +562,7 @@ program.command('insert-test')
       await benchmark.insertTest(parseInt(options.count), concurrency);
     } finally {
       await benchmark.close();
+      process.exit(0);
     }
   });
 
@@ -576,6 +577,7 @@ program.command('complex-query')
       await benchmark.complexQuery(concurrency);
     } finally {
       await benchmark.close();
+      process.exit(0);
     }
   });
 
@@ -590,6 +592,7 @@ program.command('aggregation')
       await benchmark.aggregation(concurrency);
     } finally {
       await benchmark.close();
+      process.exit(0);
     }
   });
 
@@ -607,6 +610,7 @@ program.command('full-text-search')
       await benchmark.fullTextSearch(concurrency, searchCount);
     } finally {
       await benchmark.close();
+      process.exit(0);
     }
   });
 
@@ -630,6 +634,7 @@ program.command('full-text-search')
       console.error('Error wiping data:', error);
     } finally {
       await benchmark.close();
+      process.exit(0);
     }
   });
 
@@ -659,6 +664,7 @@ program.command('full-text-search')
       console.error('Error checking databases:', error);
     } finally {
       await benchmark.close();
+      process.exit(0);
     }
   })
 

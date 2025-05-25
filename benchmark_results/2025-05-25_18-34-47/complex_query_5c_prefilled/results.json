@@ -1,0 +1,129 @@
+Connected 5 MongoDB and PostgreSQL clients
+Running complex query test...
+
+MongoDB query time: 0.22 seconds
+MongoDB query plan: {
+  explainVersion: "1",
+  queryPlanner: {
+    namespace: "benchmark.users",
+    parsedQuery: {
+      "preferences.notifications.email": {
+        $eq: true,
+      },
+    },
+    indexFilterSet: false,
+    queryHash: "156050EF",
+    planCacheShapeHash: "156050EF",
+    planCacheKey: "41B9E983",
+    optimizationTimeMillis: 0,
+    maxIndexedOrSolutionsReached: false,
+    maxIndexedAndSolutionsReached: false,
+    maxScansToExplodeReached: false,
+    prunedSimilarIndexes: false,
+    winningPlan: {
+      isCached: false,
+      stage: "COLLSCAN",
+      filter: {
+        "preferences.notifications.email": {
+          $eq: true,
+        },
+      },
+      direction: "forward",
+    },
+    rejectedPlans: [],
+  },
+  executionStats: {
+    executionSuccess: true,
+    nReturned: 50510,
+    executionTimeMillis: 37,
+    totalKeysExamined: 0,
+    totalDocsExamined: 101000,
+    executionStages: {
+      isCached: false,
+      stage: "COLLSCAN",
+      filter: {
+        "preferences.notifications.email": {
+          $eq: true,
+        },
+      },
+      nReturned: 50510,
+      executionTimeMillisEstimate: 27,
+      works: 101001,
+      advanced: 50510,
+      needTime: 50490,
+      needYield: 0,
+      saveState: 2,
+      restoreState: 2,
+      isEOF: 1,
+      direction: "forward",
+      docsExamined: 101000,
+    },
+    allPlansExecution: [],
+  },
+  queryShapeHash: "86096CBDFCEAD488E5EFF6BE0BDECC5BA2F3D1F99935AD24755ABFFB3E357FA7",
+  command: {
+    find: "users",
+    filter: {
+      "preferences.notifications.email": true,
+    },
+    $db: "benchmark",
+  },
+  serverInfo: {
+    host: "02acc73ee9bc",
+    port: 27017,
+    version: "8.0.9",
+    gitVersion: "f882ef816d531ecfbb593843e4c554fda90ca416",
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFrameworkControl: "trySbeRestricted",
+    internalQueryPlannerIgnoreIndexWithCollationForRegex: 1,
+  },
+  ok: 1,
+}
+
+MongoDB Query Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 78MB (Heap) / 196MB (Total)
+System Memory Usage: 98.39%
+
+PostgreSQL query time: 0.03 seconds
+PostgreSQL query plan:
+{
+  "QUERY PLAN": "Bitmap Heap Scan on users  (cost=617.62..12182.66 rows=50752 width=801) (actual time=2.667..12.251 rows=50553 loops=1)",
+}
+{
+  "QUERY PLAN": "  Recheck Cond: ((((data -> 'preferences'::text) -> 'notifications'::text) ->> 'email'::text) = 'true'::text)",
+}
+{
+  "QUERY PLAN": "  Heap Blocks: exact=10522",
+}
+{
+  "QUERY PLAN": "  ->  Bitmap Index Scan on idx_user_preferences  (cost=0.00..604.93 rows=50752 width=0) (actual time=1.660..1.661 rows=50553 loops=1)",
+}
+{
+  "QUERY PLAN": "        Index Cond: ((((data -> 'preferences'::text) -> 'notifications'::text) ->> 'email'::text) = 'true'::text)",
+}
+{
+  "QUERY PLAN": "Planning Time: 0.064 ms",
+}
+{
+  "QUERY PLAN": "Execution Time: 13.583 ms",
+}
+
+PostgreSQL Query Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 78MB (Heap) / 196MB (Total)
+System Memory Usage: 98.43%
+Chart saved to /Users/agolus/nosql-benchmark/outputs/query_5.jpg
+Generated performance comparison chart for complex query operations
+Closed 5 MongoDB and PostgreSQL clients

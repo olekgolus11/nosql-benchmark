@@ -1,0 +1,21 @@
+Connected 5 MongoDB and PostgreSQL clients
+Running aggregation test...
+
+MongoDB aggregation time: 1.93 seconds
+
+MongoDB Aggregation Resource Usage:
+CPU User Time: 0.87s
+CPU System Time: 0.09s
+Memory Usage: 285MB (Heap) / 429MB (Total)
+System Memory Usage: 98.09%
+
+PostgreSQL aggregation time: 0.62 seconds
+
+PostgreSQL Aggregation Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.01s
+Memory Usage: 155MB (Heap) / 390MB (Total)
+System Memory Usage: 98.36%
+Chart saved to /Users/agolus/nosql-benchmark/outputs/aggregation_5.jpg
+Generated performance comparison chart for aggregation operations
+Closed 5 MongoDB and PostgreSQL clients

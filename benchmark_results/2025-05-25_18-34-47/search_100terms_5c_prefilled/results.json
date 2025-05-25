@@ -1,0 +1,1826 @@
+Connected 5 MongoDB and PostgreSQL clients
+Running full-text search benchmark with 100 search terms...
+MongoDB text index created or already exists
+
+Search #1 of 100 - Term: "below"
+Performing MongoDB text search for term: "below"
+MongoDB found 0 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 78MB (Heap) / 195MB (Total)
+System Memory Usage: 98.07%
+Performing PostgreSQL text search for term: "below"
+PostgreSQL found 20 results in 0.03 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 78MB (Heap) / 196MB (Total)
+System Memory Usage: 98.09%
+
+Running complex pattern search...
+MongoDB regex search found 20 results in 0.07 seconds
+
+MongoDB Regex Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 78MB (Heap) / 206MB (Total)
+System Memory Usage: 98.09%
+PostgreSQL similarity search found 20 results in 1.89 seconds
+
+PostgreSQL Similarity Search Resource Usage:
+CPU User Time: 0.04s
+CPU System Time: 0.01s
+Memory Usage: 79MB (Heap) / 138MB (Total)
+System Memory Usage: 98.3%
+
+Search #2 of 100 - Term: "misbehave"
+Performing MongoDB text search for term: "misbehave"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 79MB (Heap) / 145MB (Total)
+System Memory Usage: 98.31%
+Performing PostgreSQL text search for term: "misbehave"
+PostgreSQL found 14 results in 0.67 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 80MB (Heap) / 145MB (Total)
+System Memory Usage: 98.59%
+
+Search #3 of 100 - Term: "brr"
+Performing MongoDB text search for term: "brr"
+MongoDB found 20 results in 0.04 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 81MB (Heap) / 146MB (Total)
+System Memory Usage: 98.57%
+Performing PostgreSQL text search for term: "brr"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 81MB (Heap) / 146MB (Total)
+System Memory Usage: 98.58%
+
+Search #4 of 100 - Term: "why"
+Performing MongoDB text search for term: "why"
+MongoDB found 0 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 81MB (Heap) / 147MB (Total)
+System Memory Usage: 98.59%
+Performing PostgreSQL text search for term: "why"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 81MB (Heap) / 147MB (Total)
+System Memory Usage: 98.59%
+
+Search #5 of 100 - Term: "vermicelli"
+Performing MongoDB text search for term: "vermicelli"
+MongoDB found 17 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 81MB (Heap) / 148MB (Total)
+System Memory Usage: 98.59%
+Performing PostgreSQL text search for term: "vermicelli"
+PostgreSQL found 9 results in 0.68 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 82MB (Heap) / 149MB (Total)
+System Memory Usage: 98.43%
+
+Search #6 of 100 - Term: "so"
+Performing MongoDB text search for term: "so"
+MongoDB found 0 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 82MB (Heap) / 149MB (Total)
+System Memory Usage: 98.43%
+Performing PostgreSQL text search for term: "so"
+PostgreSQL found 20 results in 0.00 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 82MB (Heap) / 149MB (Total)
+System Memory Usage: 98.44%
+
+Search #7 of 100 - Term: "styling"
+Performing MongoDB text search for term: "styling"
+MongoDB found 20 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 82MB (Heap) / 154MB (Total)
+System Memory Usage: 98.47%
+Performing PostgreSQL text search for term: "styling"
+PostgreSQL found 8 results in 0.70 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.09s
+CPU System Time: 0.01s
+Memory Usage: 82MB (Heap) / 170MB (Total)
+System Memory Usage: 98.43%
+
+Search #8 of 100 - Term: "clearly"
+Performing MongoDB text search for term: "clearly"
+MongoDB found 20 results in 0.02 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 82MB (Heap) / 170MB (Total)
+System Memory Usage: 98.43%
+Performing PostgreSQL text search for term: "clearly"
+PostgreSQL found 20 results in 0.03 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 83MB (Heap) / 170MB (Total)
+System Memory Usage: 98.43%
+
+Search #9 of 100 - Term: "whoever"
+Performing MongoDB text search for term: "whoever"
+MongoDB found 20 results in 0.04 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 83MB (Heap) / 170MB (Total)
+System Memory Usage: 98.43%
+Performing PostgreSQL text search for term: "whoever"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 84MB (Heap) / 170MB (Total)
+System Memory Usage: 98.43%
+
+Search #10 of 100 - Term: "thoughtful"
+Performing MongoDB text search for term: "thoughtful"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 84MB (Heap) / 171MB (Total)
+System Memory Usage: 98.43%
+Performing PostgreSQL text search for term: "thoughtful"
+PostgreSQL found 20 results in 0.02 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 84MB (Heap) / 171MB (Total)
+System Memory Usage: 98.43%
+
+Search #11 of 100 - Term: "what"
+Performing MongoDB text search for term: "what"
+MongoDB found 0 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 84MB (Heap) / 171MB (Total)
+System Memory Usage: 98.43%
+Performing PostgreSQL text search for term: "what"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 85MB (Heap) / 171MB (Total)
+System Memory Usage: 98.43%
+
+Search #12 of 100 - Term: "rightfully"
+Performing MongoDB text search for term: "rightfully"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 85MB (Heap) / 172MB (Total)
+System Memory Usage: 98.43%
+Performing PostgreSQL text search for term: "rightfully"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 86MB (Heap) / 172MB (Total)
+System Memory Usage: 98.43%
+
+Search #13 of 100 - Term: "down"
+Performing MongoDB text search for term: "down"
+MongoDB found 0 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 86MB (Heap) / 172MB (Total)
+System Memory Usage: 98.43%
+Performing PostgreSQL text search for term: "down"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 86MB (Heap) / 172MB (Total)
+System Memory Usage: 98.43%
+
+Search #14 of 100 - Term: "modest"
+Performing MongoDB text search for term: "modest"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 86MB (Heap) / 173MB (Total)
+System Memory Usage: 98.43%
+Performing PostgreSQL text search for term: "modest"
+PostgreSQL found 20 results in 0.17 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 87MB (Heap) / 173MB (Total)
+System Memory Usage: 98.43%
+
+Search #15 of 100 - Term: "innocently"
+Performing MongoDB text search for term: "innocently"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 87MB (Heap) / 174MB (Total)
+System Memory Usage: 98.43%
+Performing PostgreSQL text search for term: "innocently"
+PostgreSQL found 20 results in 0.05 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 88MB (Heap) / 174MB (Total)
+System Memory Usage: 98.43%
+
+Search #16 of 100 - Term: "rightfully"
+Performing MongoDB text search for term: "rightfully"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 88MB (Heap) / 175MB (Total)
+System Memory Usage: 98.43%
+Performing PostgreSQL text search for term: "rightfully"
+PostgreSQL found 20 results in 0.02 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 89MB (Heap) / 175MB (Total)
+System Memory Usage: 98.43%
+
+Search #17 of 100 - Term: "what"
+Performing MongoDB text search for term: "what"
+MongoDB found 0 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 89MB (Heap) / 175MB (Total)
+System Memory Usage: 98.43%
+Performing PostgreSQL text search for term: "what"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 89MB (Heap) / 175MB (Total)
+System Memory Usage: 98.43%
+
+Search #18 of 100 - Term: "hence"
+Performing MongoDB text search for term: "hence"
+MongoDB found 20 results in 0.03 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 90MB (Heap) / 176MB (Total)
+System Memory Usage: 98.43%
+Performing PostgreSQL text search for term: "hence"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 90MB (Heap) / 176MB (Total)
+System Memory Usage: 98.43%
+
+Search #19 of 100 - Term: "but"
+Performing MongoDB text search for term: "but"
+MongoDB found 0 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 90MB (Heap) / 177MB (Total)
+System Memory Usage: 98.43%
+Performing PostgreSQL text search for term: "but"
+PostgreSQL found 20 results in 0.00 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 90MB (Heap) / 177MB (Total)
+System Memory Usage: 98.43%
+
+Search #20 of 100 - Term: "canst"
+Performing MongoDB text search for term: "canst"
+MongoDB found 14 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 90MB (Heap) / 177MB (Total)
+System Memory Usage: 98.43%
+Performing PostgreSQL text search for term: "canst"
+PostgreSQL found 12 results in 0.73 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 91MB (Heap) / 177MB (Total)
+System Memory Usage: 98.63%
+
+Search #21 of 100 - Term: "state"
+Performing MongoDB text search for term: "state"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 91MB (Heap) / 178MB (Total)
+System Memory Usage: 98.63%
+Performing PostgreSQL text search for term: "state"
+PostgreSQL found 20 results in 0.05 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.08s
+CPU System Time: 0.00s
+Memory Usage: 91MB (Heap) / 181MB (Total)
+System Memory Usage: 98.69%
+
+Search #22 of 100 - Term: "above"
+Performing MongoDB text search for term: "above"
+MongoDB found 0 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 91MB (Heap) / 181MB (Total)
+System Memory Usage: 98.69%
+Performing PostgreSQL text search for term: "above"
+PostgreSQL found 20 results in 0.02 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 91MB (Heap) / 181MB (Total)
+System Memory Usage: 98.69%
+
+Search #23 of 100 - Term: "storey"
+Performing MongoDB text search for term: "storey"
+MongoDB found 20 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 91MB (Heap) / 182MB (Total)
+System Memory Usage: 98.69%
+Performing PostgreSQL text search for term: "storey"
+PostgreSQL found 16 results in 0.67 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 92MB (Heap) / 182MB (Total)
+System Memory Usage: 98.66%
+
+Search #24 of 100 - Term: "convey"
+Performing MongoDB text search for term: "convey"
+MongoDB found 16 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 92MB (Heap) / 182MB (Total)
+System Memory Usage: 98.67%
+Performing PostgreSQL text search for term: "convey"
+PostgreSQL found 19 results in 0.70 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.03s
+CPU System Time: 0.01s
+Memory Usage: 93MB (Heap) / 183MB (Total)
+System Memory Usage: 98.67%
+
+Search #25 of 100 - Term: "bail"
+Performing MongoDB text search for term: "bail"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 93MB (Heap) / 183MB (Total)
+System Memory Usage: 98.67%
+Performing PostgreSQL text search for term: "bail"
+PostgreSQL found 20 results in 0.24 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 93MB (Heap) / 184MB (Total)
+System Memory Usage: 98.67%
+
+Search #26 of 100 - Term: "aha"
+Performing MongoDB text search for term: "aha"
+MongoDB found 20 results in 0.03 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 93MB (Heap) / 184MB (Total)
+System Memory Usage: 98.67%
+Performing PostgreSQL text search for term: "aha"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 94MB (Heap) / 185MB (Total)
+System Memory Usage: 98.67%
+
+Search #27 of 100 - Term: "kookily"
+Performing MongoDB text search for term: "kookily"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 94MB (Heap) / 185MB (Total)
+System Memory Usage: 98.67%
+Performing PostgreSQL text search for term: "kookily"
+PostgreSQL found 20 results in 0.04 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 95MB (Heap) / 185MB (Total)
+System Memory Usage: 98.67%
+
+Search #28 of 100 - Term: "ferociously"
+Performing MongoDB text search for term: "ferociously"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 95MB (Heap) / 185MB (Total)
+System Memory Usage: 98.67%
+Performing PostgreSQL text search for term: "ferociously"
+PostgreSQL found 20 results in 0.04 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 96MB (Heap) / 185MB (Total)
+System Memory Usage: 98.67%
+
+Search #29 of 100 - Term: "shovel"
+Performing MongoDB text search for term: "shovel"
+MongoDB found 20 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 96MB (Heap) / 186MB (Total)
+System Memory Usage: 98.67%
+Performing PostgreSQL text search for term: "shovel"
+PostgreSQL found 20 results in 0.39 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 96MB (Heap) / 186MB (Total)
+System Memory Usage: 98.54%
+
+Search #30 of 100 - Term: "how"
+Performing MongoDB text search for term: "how"
+MongoDB found 0 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 96MB (Heap) / 186MB (Total)
+System Memory Usage: 98.54%
+Performing PostgreSQL text search for term: "how"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 96MB (Heap) / 186MB (Total)
+System Memory Usage: 98.54%
+
+Search #31 of 100 - Term: "wearily"
+Performing MongoDB text search for term: "wearily"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 97MB (Heap) / 187MB (Total)
+System Memory Usage: 98.54%
+Performing PostgreSQL text search for term: "wearily"
+PostgreSQL found 20 results in 0.06 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 97MB (Heap) / 187MB (Total)
+System Memory Usage: 98.54%
+
+Search #32 of 100 - Term: "trend"
+Performing MongoDB text search for term: "trend"
+MongoDB found 18 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 97MB (Heap) / 187MB (Total)
+System Memory Usage: 98.54%
+Performing PostgreSQL text search for term: "trend"
+PostgreSQL found 6 results in 0.65 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 98MB (Heap) / 187MB (Total)
+System Memory Usage: 98.47%
+
+Search #33 of 100 - Term: "before"
+Performing MongoDB text search for term: "before"
+MongoDB found 0 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 98MB (Heap) / 187MB (Total)
+System Memory Usage: 98.47%
+Performing PostgreSQL text search for term: "before"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 98MB (Heap) / 187MB (Total)
+System Memory Usage: 98.47%
+
+Search #34 of 100 - Term: "over"
+Performing MongoDB text search for term: "over"
+MongoDB found 0 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 98MB (Heap) / 187MB (Total)
+System Memory Usage: 98.47%
+Performing PostgreSQL text search for term: "over"
+PostgreSQL found 20 results in 0.00 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 98MB (Heap) / 188MB (Total)
+System Memory Usage: 98.47%
+
+Search #35 of 100 - Term: "aw"
+Performing MongoDB text search for term: "aw"
+MongoDB found 20 results in 0.03 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 99MB (Heap) / 188MB (Total)
+System Memory Usage: 98.47%
+Performing PostgreSQL text search for term: "aw"
+PostgreSQL found 20 results in 0.00 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 99MB (Heap) / 188MB (Total)
+System Memory Usage: 98.47%
+
+Search #36 of 100 - Term: "eek"
+Performing MongoDB text search for term: "eek"
+MongoDB found 20 results in 0.03 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 99MB (Heap) / 189MB (Total)
+System Memory Usage: 98.47%
+Performing PostgreSQL text search for term: "eek"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 99MB (Heap) / 190MB (Total)
+System Memory Usage: 98.47%
+
+Search #37 of 100 - Term: "drat"
+Performing MongoDB text search for term: "drat"
+MongoDB found 20 results in 0.03 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 100MB (Heap) / 191MB (Total)
+System Memory Usage: 98.47%
+Performing PostgreSQL text search for term: "drat"
+PostgreSQL found 20 results in 0.00 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 100MB (Heap) / 191MB (Total)
+System Memory Usage: 98.47%
+
+Search #38 of 100 - Term: "unlucky"
+Performing MongoDB text search for term: "unlucky"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 100MB (Heap) / 191MB (Total)
+System Memory Usage: 98.47%
+Performing PostgreSQL text search for term: "unlucky"
+PostgreSQL found 20 results in 0.15 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 101MB (Heap) / 191MB (Total)
+System Memory Usage: 98.47%
+
+Search #39 of 100 - Term: "by"
+Performing MongoDB text search for term: "by"
+MongoDB found 0 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 101MB (Heap) / 191MB (Total)
+System Memory Usage: 98.47%
+Performing PostgreSQL text search for term: "by"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 101MB (Heap) / 192MB (Total)
+System Memory Usage: 98.47%
+
+Search #40 of 100 - Term: "when"
+Performing MongoDB text search for term: "when"
+MongoDB found 0 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 102MB (Heap) / 192MB (Total)
+System Memory Usage: 98.47%
+Performing PostgreSQL text search for term: "when"
+PostgreSQL found 20 results in 0.00 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 102MB (Heap) / 192MB (Total)
+System Memory Usage: 98.47%
+
+Search #41 of 100 - Term: "scarcely"
+Performing MongoDB text search for term: "scarcely"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 102MB (Heap) / 193MB (Total)
+System Memory Usage: 98.47%
+Performing PostgreSQL text search for term: "scarcely"
+PostgreSQL found 20 results in 0.05 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 103MB (Heap) / 193MB (Total)
+System Memory Usage: 98.47%
+
+Search #42 of 100 - Term: "likely"
+Performing MongoDB text search for term: "likely"
+MongoDB found 20 results in 0.02 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 103MB (Heap) / 194MB (Total)
+System Memory Usage: 98.47%
+Performing PostgreSQL text search for term: "likely"
+PostgreSQL found 20 results in 0.02 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 104MB (Heap) / 194MB (Total)
+System Memory Usage: 98.47%
+
+Search #43 of 100 - Term: "duh"
+Performing MongoDB text search for term: "duh"
+MongoDB found 20 results in 0.03 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 104MB (Heap) / 195MB (Total)
+System Memory Usage: 98.47%
+Performing PostgreSQL text search for term: "duh"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 105MB (Heap) / 196MB (Total)
+System Memory Usage: 98.47%
+
+Search #44 of 100 - Term: "an"
+Performing MongoDB text search for term: "an"
+MongoDB found 0 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 105MB (Heap) / 196MB (Total)
+System Memory Usage: 98.47%
+Performing PostgreSQL text search for term: "an"
+PostgreSQL found 20 results in 0.00 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 105MB (Heap) / 196MB (Total)
+System Memory Usage: 98.47%
+
+Search #45 of 100 - Term: "ouch"
+Performing MongoDB text search for term: "ouch"
+MongoDB found 20 results in 0.03 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 105MB (Heap) / 196MB (Total)
+System Memory Usage: 98.47%
+Performing PostgreSQL text search for term: "ouch"
+PostgreSQL found 20 results in 0.00 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 105MB (Heap) / 196MB (Total)
+System Memory Usage: 98.47%
+
+Search #46 of 100 - Term: "rite"
+Performing MongoDB text search for term: "rite"
+MongoDB found 16 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 106MB (Heap) / 197MB (Total)
+System Memory Usage: 98.47%
+Performing PostgreSQL text search for term: "rite"
+PostgreSQL found 20 results in 0.04 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 107MB (Heap) / 197MB (Total)
+System Memory Usage: 98.47%
+
+Search #47 of 100 - Term: "pish"
+Performing MongoDB text search for term: "pish"
+MongoDB found 20 results in 0.03 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 107MB (Heap) / 198MB (Total)
+System Memory Usage: 98.47%
+Performing PostgreSQL text search for term: "pish"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 107MB (Heap) / 198MB (Total)
+System Memory Usage: 98.47%
+
+Search #48 of 100 - Term: "heartache"
+Performing MongoDB text search for term: "heartache"
+MongoDB found 16 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 107MB (Heap) / 199MB (Total)
+System Memory Usage: 98.47%
+Performing PostgreSQL text search for term: "heartache"
+PostgreSQL found 16 results in 0.66 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 108MB (Heap) / 198MB (Total)
+System Memory Usage: 98.2%
+
+Search #49 of 100 - Term: "coaxingly"
+Performing MongoDB text search for term: "coaxingly"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 108MB (Heap) / 199MB (Total)
+System Memory Usage: 98.2%
+Performing PostgreSQL text search for term: "coaxingly"
+PostgreSQL found 20 results in 0.03 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 108MB (Heap) / 199MB (Total)
+System Memory Usage: 98.2%
+
+Search #50 of 100 - Term: "scarily"
+Performing MongoDB text search for term: "scarily"
+MongoDB found 20 results in 0.02 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 109MB (Heap) / 199MB (Total)
+System Memory Usage: 98.2%
+Performing PostgreSQL text search for term: "scarily"
+PostgreSQL found 20 results in 0.04 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 109MB (Heap) / 199MB (Total)
+System Memory Usage: 98.2%
+
+Search #51 of 100 - Term: "oblige"
+Performing MongoDB text search for term: "oblige"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 109MB (Heap) / 200MB (Total)
+System Memory Usage: 98.2%
+Performing PostgreSQL text search for term: "oblige"
+PostgreSQL found 19 results in 0.65 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 110MB (Heap) / 200MB (Total)
+System Memory Usage: 98.32%
+
+Search #52 of 100 - Term: "switchboard"
+Performing MongoDB text search for term: "switchboard"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 110MB (Heap) / 201MB (Total)
+System Memory Usage: 98.31%
+Performing PostgreSQL text search for term: "switchboard"
+PostgreSQL found 18 results in 0.73 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 111MB (Heap) / 201MB (Total)
+System Memory Usage: 98.3%
+
+Search #53 of 100 - Term: "than"
+Performing MongoDB text search for term: "than"
+MongoDB found 0 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 111MB (Heap) / 201MB (Total)
+System Memory Usage: 98.3%
+Performing PostgreSQL text search for term: "than"
+PostgreSQL found 20 results in 0.00 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 111MB (Heap) / 201MB (Total)
+System Memory Usage: 98.3%
+
+Search #54 of 100 - Term: "never"
+Performing MongoDB text search for term: "never"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 111MB (Heap) / 202MB (Total)
+System Memory Usage: 98.3%
+Performing PostgreSQL text search for term: "never"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 111MB (Heap) / 202MB (Total)
+System Memory Usage: 98.3%
+
+Search #55 of 100 - Term: "gosh"
+Performing MongoDB text search for term: "gosh"
+MongoDB found 20 results in 0.03 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 112MB (Heap) / 202MB (Total)
+System Memory Usage: 98.3%
+Performing PostgreSQL text search for term: "gosh"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 112MB (Heap) / 202MB (Total)
+System Memory Usage: 98.3%
+
+Search #56 of 100 - Term: "substantial"
+Performing MongoDB text search for term: "substantial"
+MongoDB found 20 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 112MB (Heap) / 203MB (Total)
+System Memory Usage: 98.3%
+Performing PostgreSQL text search for term: "substantial"
+PostgreSQL found 20 results in 0.08 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 113MB (Heap) / 204MB (Total)
+System Memory Usage: 98.3%
+
+Search #57 of 100 - Term: "forenenst"
+Performing MongoDB text search for term: "forenenst"
+MongoDB found 20 results in 0.02 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 113MB (Heap) / 204MB (Total)
+System Memory Usage: 98.3%
+Performing PostgreSQL text search for term: "forenenst"
+PostgreSQL found 20 results in 0.02 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 114MB (Heap) / 204MB (Total)
+System Memory Usage: 98.3%
+
+Search #58 of 100 - Term: "uniformity"
+Performing MongoDB text search for term: "uniformity"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 114MB (Heap) / 205MB (Total)
+System Memory Usage: 98.3%
+Performing PostgreSQL text search for term: "uniformity"
+PostgreSQL found 15 results in 0.73 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.03s
+CPU System Time: 0.00s
+Memory Usage: 114MB (Heap) / 205MB (Total)
+System Memory Usage: 98.5%
+
+Search #59 of 100 - Term: "closely"
+Performing MongoDB text search for term: "closely"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 114MB (Heap) / 205MB (Total)
+System Memory Usage: 98.53%
+Performing PostgreSQL text search for term: "closely"
+PostgreSQL found 20 results in 0.05 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 115MB (Heap) / 205MB (Total)
+System Memory Usage: 98.53%
+
+Search #60 of 100 - Term: "concerning"
+Performing MongoDB text search for term: "concerning"
+MongoDB found 20 results in 0.02 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 115MB (Heap) / 206MB (Total)
+System Memory Usage: 98.53%
+Performing PostgreSQL text search for term: "concerning"
+PostgreSQL found 20 results in 0.02 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 116MB (Heap) / 206MB (Total)
+System Memory Usage: 98.53%
+
+Search #61 of 100 - Term: "of"
+Performing MongoDB text search for term: "of"
+MongoDB found 0 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 116MB (Heap) / 206MB (Total)
+System Memory Usage: 98.53%
+Performing PostgreSQL text search for term: "of"
+PostgreSQL found 20 results in 0.00 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 116MB (Heap) / 206MB (Total)
+System Memory Usage: 98.53%
+
+Search #62 of 100 - Term: "inexperienced"
+Performing MongoDB text search for term: "inexperienced"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 116MB (Heap) / 206MB (Total)
+System Memory Usage: 98.53%
+Performing PostgreSQL text search for term: "inexperienced"
+PostgreSQL found 20 results in 0.16 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 117MB (Heap) / 206MB (Total)
+System Memory Usage: 98.53%
+
+Search #63 of 100 - Term: "clock"
+Performing MongoDB text search for term: "clock"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 117MB (Heap) / 207MB (Total)
+System Memory Usage: 98.53%
+Performing PostgreSQL text search for term: "clock"
+PostgreSQL found 20 results in 0.25 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 118MB (Heap) / 207MB (Total)
+System Memory Usage: 98.53%
+
+Search #64 of 100 - Term: "yet"
+Performing MongoDB text search for term: "yet"
+MongoDB found 20 results in 0.03 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 118MB (Heap) / 208MB (Total)
+System Memory Usage: 98.55%
+Performing PostgreSQL text search for term: "yet"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 119MB (Heap) / 209MB (Total)
+System Memory Usage: 98.56%
+
+Search #65 of 100 - Term: "though"
+Performing MongoDB text search for term: "though"
+MongoDB found 20 results in 0.03 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 119MB (Heap) / 209MB (Total)
+System Memory Usage: 98.56%
+Performing PostgreSQL text search for term: "though"
+PostgreSQL found 20 results in 0.00 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 119MB (Heap) / 209MB (Total)
+System Memory Usage: 98.56%
+
+Search #66 of 100 - Term: "mid"
+Performing MongoDB text search for term: "mid"
+MongoDB found 20 results in 0.02 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 120MB (Heap) / 210MB (Total)
+System Memory Usage: 98.56%
+Performing PostgreSQL text search for term: "mid"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 121MB (Heap) / 210MB (Total)
+System Memory Usage: 98.56%
+
+Search #67 of 100 - Term: "paralyze"
+Performing MongoDB text search for term: "paralyze"
+MongoDB found 16 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 121MB (Heap) / 213MB (Total)
+System Memory Usage: 98.56%
+Performing PostgreSQL text search for term: "paralyze"
+PostgreSQL found 16 results in 0.78 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 121MB (Heap) / 213MB (Total)
+System Memory Usage: 98.45%
+
+Search #68 of 100 - Term: "if"
+Performing MongoDB text search for term: "if"
+MongoDB found 0 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 121MB (Heap) / 213MB (Total)
+System Memory Usage: 98.45%
+Performing PostgreSQL text search for term: "if"
+PostgreSQL found 20 results in 0.00 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 121MB (Heap) / 213MB (Total)
+System Memory Usage: 98.45%
+
+Search #69 of 100 - Term: "gosh"
+Performing MongoDB text search for term: "gosh"
+MongoDB found 20 results in 0.03 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 122MB (Heap) / 214MB (Total)
+System Memory Usage: 98.45%
+Performing PostgreSQL text search for term: "gosh"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 122MB (Heap) / 214MB (Total)
+System Memory Usage: 98.45%
+
+Search #70 of 100 - Term: "gateway"
+Performing MongoDB text search for term: "gateway"
+MongoDB found 20 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 122MB (Heap) / 215MB (Total)
+System Memory Usage: 98.45%
+Performing PostgreSQL text search for term: "gateway"
+PostgreSQL found 14 results in 0.67 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.03s
+CPU System Time: 0.00s
+Memory Usage: 123MB (Heap) / 189MB (Total)
+System Memory Usage: 98.05%
+
+Search #71 of 100 - Term: "keenly"
+Performing MongoDB text search for term: "keenly"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 123MB (Heap) / 190MB (Total)
+System Memory Usage: 98.06%
+Performing PostgreSQL text search for term: "keenly"
+PostgreSQL found 20 results in 0.04 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 123MB (Heap) / 190MB (Total)
+System Memory Usage: 98.06%
+
+Search #72 of 100 - Term: "or"
+Performing MongoDB text search for term: "or"
+MongoDB found 0 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 123MB (Heap) / 190MB (Total)
+System Memory Usage: 98.06%
+Performing PostgreSQL text search for term: "or"
+PostgreSQL found 20 results in 0.00 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 123MB (Heap) / 190MB (Total)
+System Memory Usage: 98.06%
+
+Search #73 of 100 - Term: "roster"
+Performing MongoDB text search for term: "roster"
+MongoDB found 20 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 123MB (Heap) / 190MB (Total)
+System Memory Usage: 98.06%
+Performing PostgreSQL text search for term: "roster"
+PostgreSQL found 20 results in 0.37 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.03s
+CPU System Time: 0.00s
+Memory Usage: 124MB (Heap) / 184MB (Total)
+System Memory Usage: 98.06%
+
+Search #74 of 100 - Term: "finally"
+Performing MongoDB text search for term: "finally"
+MongoDB found 20 results in 0.03 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 124MB (Heap) / 185MB (Total)
+System Memory Usage: 98.06%
+Performing PostgreSQL text search for term: "finally"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 125MB (Heap) / 185MB (Total)
+System Memory Usage: 98.06%
+
+Search #75 of 100 - Term: "off"
+Performing MongoDB text search for term: "off"
+MongoDB found 0 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 125MB (Heap) / 185MB (Total)
+System Memory Usage: 98.06%
+Performing PostgreSQL text search for term: "off"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 125MB (Heap) / 185MB (Total)
+System Memory Usage: 98.06%
+
+Search #76 of 100 - Term: "brutalize"
+Performing MongoDB text search for term: "brutalize"
+MongoDB found 19 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 125MB (Heap) / 186MB (Total)
+System Memory Usage: 98.06%
+Performing PostgreSQL text search for term: "brutalize"
+PostgreSQL found 16 results in 0.65 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 126MB (Heap) / 186MB (Total)
+System Memory Usage: 98%
+
+Search #77 of 100 - Term: "anenst"
+Performing MongoDB text search for term: "anenst"
+MongoDB found 20 results in 0.02 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 126MB (Heap) / 186MB (Total)
+System Memory Usage: 98%
+Performing PostgreSQL text search for term: "anenst"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 126MB (Heap) / 186MB (Total)
+System Memory Usage: 98.01%
+
+Search #78 of 100 - Term: "fast"
+Performing MongoDB text search for term: "fast"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 127MB (Heap) / 186MB (Total)
+System Memory Usage: 98.01%
+Performing PostgreSQL text search for term: "fast"
+PostgreSQL found 20 results in 0.03 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 127MB (Heap) / 186MB (Total)
+System Memory Usage: 98%
+
+Search #79 of 100 - Term: "yearly"
+Performing MongoDB text search for term: "yearly"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 127MB (Heap) / 187MB (Total)
+System Memory Usage: 98%
+Performing PostgreSQL text search for term: "yearly"
+PostgreSQL found 20 results in 0.03 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 128MB (Heap) / 187MB (Total)
+System Memory Usage: 98%
+
+Search #80 of 100 - Term: "silver"
+Performing MongoDB text search for term: "silver"
+MongoDB found 20 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 128MB (Heap) / 187MB (Total)
+System Memory Usage: 98%
+Performing PostgreSQL text search for term: "silver"
+PostgreSQL found 20 results in 0.11 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 128MB (Heap) / 187MB (Total)
+System Memory Usage: 98%
+
+Search #81 of 100 - Term: "outdo"
+Performing MongoDB text search for term: "outdo"
+MongoDB found 15 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 128MB (Heap) / 188MB (Total)
+System Memory Usage: 98%
+Performing PostgreSQL text search for term: "outdo"
+PostgreSQL found 20 results in 0.63 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 129MB (Heap) / 187MB (Total)
+System Memory Usage: 98.06%
+
+Search #82 of 100 - Term: "potentially"
+Performing MongoDB text search for term: "potentially"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 129MB (Heap) / 187MB (Total)
+System Memory Usage: 98.07%
+Performing PostgreSQL text search for term: "potentially"
+PostgreSQL found 20 results in 0.06 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 129MB (Heap) / 187MB (Total)
+System Memory Usage: 98.11%
+
+Search #83 of 100 - Term: "board"
+Performing MongoDB text search for term: "board"
+MongoDB found 20 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 130MB (Heap) / 188MB (Total)
+System Memory Usage: 98.11%
+Performing PostgreSQL text search for term: "board"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 130MB (Heap) / 188MB (Total)
+System Memory Usage: 98.11%
+
+Search #84 of 100 - Term: "snoopy"
+Performing MongoDB text search for term: "snoopy"
+MongoDB found 20 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 130MB (Heap) / 188MB (Total)
+System Memory Usage: 98.11%
+Performing PostgreSQL text search for term: "snoopy"
+PostgreSQL found 20 results in 0.15 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 130MB (Heap) / 188MB (Total)
+System Memory Usage: 98.11%
+
+Search #85 of 100 - Term: "pfft"
+Performing MongoDB text search for term: "pfft"
+MongoDB found 20 results in 0.03 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 131MB (Heap) / 189MB (Total)
+System Memory Usage: 98.11%
+Performing PostgreSQL text search for term: "pfft"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 131MB (Heap) / 189MB (Total)
+System Memory Usage: 98.11%
+
+Search #86 of 100 - Term: "because"
+Performing MongoDB text search for term: "because"
+MongoDB found 0 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 131MB (Heap) / 189MB (Total)
+System Memory Usage: 98.11%
+Performing PostgreSQL text search for term: "because"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 131MB (Heap) / 189MB (Total)
+System Memory Usage: 98.11%
+
+Search #87 of 100 - Term: "furthermore"
+Performing MongoDB text search for term: "furthermore"
+MongoDB found 20 results in 0.03 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 132MB (Heap) / 190MB (Total)
+System Memory Usage: 98.11%
+Performing PostgreSQL text search for term: "furthermore"
+PostgreSQL found 20 results in 0.00 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 132MB (Heap) / 190MB (Total)
+System Memory Usage: 98.11%
+
+Search #88 of 100 - Term: "vital"
+Performing MongoDB text search for term: "vital"
+MongoDB found 20 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 132MB (Heap) / 191MB (Total)
+System Memory Usage: 98.11%
+Performing PostgreSQL text search for term: "vital"
+PostgreSQL found 20 results in 0.06 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 133MB (Heap) / 192MB (Total)
+System Memory Usage: 98.11%
+
+Search #89 of 100 - Term: "whether"
+Performing MongoDB text search for term: "whether"
+MongoDB found 20 results in 0.03 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 134MB (Heap) / 192MB (Total)
+System Memory Usage: 98.11%
+Performing PostgreSQL text search for term: "whether"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 134MB (Heap) / 192MB (Total)
+System Memory Usage: 98.11%
+
+Search #90 of 100 - Term: "mattock"
+Performing MongoDB text search for term: "mattock"
+MongoDB found 20 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 134MB (Heap) / 193MB (Total)
+System Memory Usage: 98.11%
+Performing PostgreSQL text search for term: "mattock"
+PostgreSQL found 17 results in 0.66 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.03s
+CPU System Time: 0.01s
+Memory Usage: 135MB (Heap) / 191MB (Total)
+System Memory Usage: 99.1%
+
+Search #91 of 100 - Term: "where"
+Performing MongoDB text search for term: "where"
+MongoDB found 0 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 135MB (Heap) / 191MB (Total)
+System Memory Usage: 99.1%
+Performing PostgreSQL text search for term: "where"
+PostgreSQL found 20 results in 0.00 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 135MB (Heap) / 191MB (Total)
+System Memory Usage: 99.1%
+
+Search #92 of 100 - Term: "attenuate"
+Performing MongoDB text search for term: "attenuate"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 135MB (Heap) / 192MB (Total)
+System Memory Usage: 99.1%
+Performing PostgreSQL text search for term: "attenuate"
+PostgreSQL found 8 results in 0.92 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 135MB (Heap) / 123MB (Total)
+System Memory Usage: 99.02%
+
+Search #93 of 100 - Term: "and"
+Performing MongoDB text search for term: "and"
+MongoDB found 0 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 135MB (Heap) / 123MB (Total)
+System Memory Usage: 99.02%
+Performing PostgreSQL text search for term: "and"
+PostgreSQL found 20 results in 0.00 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 135MB (Heap) / 124MB (Total)
+System Memory Usage: 99.02%
+
+Search #94 of 100 - Term: "floor"
+Performing MongoDB text search for term: "floor"
+MongoDB found 20 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 135MB (Heap) / 126MB (Total)
+System Memory Usage: 99.02%
+Performing PostgreSQL text search for term: "floor"
+PostgreSQL found 20 results in 0.38 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 136MB (Heap) / 125MB (Total)
+System Memory Usage: 99.02%
+
+Search #95 of 100 - Term: "matchmaker"
+Performing MongoDB text search for term: "matchmaker"
+MongoDB found 13 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 136MB (Heap) / 126MB (Total)
+System Memory Usage: 99.02%
+Performing PostgreSQL text search for term: "matchmaker"
+PostgreSQL found 10 results in 0.66 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 136MB (Heap) / 126MB (Total)
+System Memory Usage: 99.05%
+
+Search #96 of 100 - Term: "psst"
+Performing MongoDB text search for term: "psst"
+MongoDB found 20 results in 0.04 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 137MB (Heap) / 126MB (Total)
+System Memory Usage: 99.02%
+Performing PostgreSQL text search for term: "psst"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 137MB (Heap) / 126MB (Total)
+System Memory Usage: 99.01%
+
+Search #97 of 100 - Term: "denominate"
+Performing MongoDB text search for term: "denominate"
+MongoDB found 20 results in 0.00 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 137MB (Heap) / 127MB (Total)
+System Memory Usage: 99.01%
+Performing PostgreSQL text search for term: "denominate"
+PostgreSQL found 15 results in 0.66 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 138MB (Heap) / 127MB (Total)
+System Memory Usage: 98.89%
+
+Search #98 of 100 - Term: "instantly"
+Performing MongoDB text search for term: "instantly"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 138MB (Heap) / 127MB (Total)
+System Memory Usage: 98.89%
+Performing PostgreSQL text search for term: "instantly"
+PostgreSQL found 20 results in 0.03 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 138MB (Heap) / 128MB (Total)
+System Memory Usage: 98.88%
+
+Search #99 of 100 - Term: "considerate"
+Performing MongoDB text search for term: "considerate"
+MongoDB found 20 results in 0.01 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 138MB (Heap) / 128MB (Total)
+System Memory Usage: 98.89%
+Performing PostgreSQL text search for term: "considerate"
+PostgreSQL found 20 results in 0.25 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.02s
+CPU System Time: 0.00s
+Memory Usage: 139MB (Heap) / 128MB (Total)
+System Memory Usage: 98.89%
+
+Search #100 of 100 - Term: "phooey"
+Performing MongoDB text search for term: "phooey"
+MongoDB found 20 results in 0.03 seconds
+
+MongoDB Text Search Resource Usage:
+CPU User Time: 0.01s
+CPU System Time: 0.00s
+Memory Usage: 140MB (Heap) / 129MB (Total)
+System Memory Usage: 98.89%
+Performing PostgreSQL text search for term: "phooey"
+PostgreSQL found 20 results in 0.01 seconds
+
+PostgreSQL Text Search Resource Usage:
+CPU User Time: 0.00s
+CPU System Time: 0.00s
+Memory Usage: 140MB (Heap) / 129MB (Total)
+System Memory Usage: 98.89%
+
+Summary: Ran 100 search terms
+Average MongoDB search time: 0.01 seconds
+Average PostgreSQL search time: 0.17 seconds
+Chart saved to /Users/agolus/nosql-benchmark/outputs/full_text_search_5_100.png
+Generated performance comparison chart for full-text search operations
+Closed 5 MongoDB and PostgreSQL clients
