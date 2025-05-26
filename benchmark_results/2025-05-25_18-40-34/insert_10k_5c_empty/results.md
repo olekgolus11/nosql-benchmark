@@ -1,0 +1,25 @@
+Connected 5 MongoDB and PostgreSQL clients
+Running insert test with 10000 documents using 5 concurrent clients...
+MongoDB progress: 5%MongoDB progress: 10%MongoDB progress: 15%MongoDB progress: 20%MongoDB progress: 25%MongoDB progress: 30%MongoDB progress: 35%MongoDB progress: 40%MongoDB progress: 45%MongoDB progress: 50%MongoDB progress: 55%MongoDB progress: 60%MongoDB progress: 65%MongoDB progress: 70%MongoDB progress: 75%MongoDB progress: 80%MongoDB progress: 85%MongoDB progress: 90%MongoDB progress: 95%MongoDB progress: 100%
+
+MongoDB: 10000 documents inserted in 1.84 seconds
+MongoDB average insert speed: 5435.57 docs/sec
+
+MongoDB Insert Resource Usage:
+CPU User Time: 2.09s
+CPU System Time: 0.32s
+Memory Usage: 89MB (Heap) / 269MB (Total)
+System Memory Usage: 99.32%
+PostgreSQL progress: 5%PostgreSQL progress: 10%PostgreSQL progress: 15%PostgreSQL progress: 20%PostgreSQL progress: 25%PostgreSQL progress: 30%PostgreSQL progress: 35%PostgreSQL progress: 40%PostgreSQL progress: 45%PostgreSQL progress: 50%PostgreSQL progress: 55%PostgreSQL progress: 60%PostgreSQL progress: 65%PostgreSQL progress: 70%PostgreSQL progress: 75%PostgreSQL progress: 80%PostgreSQL progress: 85%PostgreSQL progress: 90%PostgreSQL progress: 95%PostgreSQL progress: 100%
+
+PostgreSQL: 10000 documents inserted in 1.87 seconds
+PostgreSQL average insert speed: 5337.62 docs/sec
+
+PostgreSQL Insert Resource Usage:
+CPU User Time: 0.92s
+CPU System Time: 0.27s
+Memory Usage: 114MB (Heap) / 215MB (Total)
+System Memory Usage: 99.36%
+Chart saved to /Users/agolus/nosql-benchmark/outputs/insert_5_10000.jpg
+Generated performance comparison chart for insert operations
+Closed 5 MongoDB and PostgreSQL clients

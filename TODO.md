@@ -24,10 +24,10 @@
 
 ## Phase 3: Testing and Refinement
 
-- [ ] Test the overall benchmark runner with a few sample configurations.
-- [ ] Verify that outputs are generated correctly and stored in the designated location.
-- [ ] Refine test parameters and configurations based on initial results.
-- [ ] Ensure clear separation and logging for each test run.
+- [P] Test the overall benchmark runner with a few sample configurations. (Output changed to results.md, headers added)
+- [P] Verify that outputs are generated correctly and stored in the designated location. (Checking new results.md format and headers)
+- [P] Refine test parameters and configurations based on initial results. (Scenarios made more demanding)
+- [X] Ensure clear separation and logging for each test run. (Structure seems effective)
 
 ## Phase 4: Documentation (Optional - based on user needs)
 
